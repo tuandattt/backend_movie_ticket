@@ -29,8 +29,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $row['password'])) {
             $_SESSION['loggedin'] = true;
             $_SESSION['username'] = $username;
-            //chuyển sang trang chính
-            header("location: welcome.php");
+            
+            // Kiểm tra nếu username có chứa "admin"
+            if (stripos($username, 'admin') !== false) {
+                header("location: welcome_admin.php");
+            } else {
+                header("location: welcome_user.php");
+            }
+            exit(); // Thêm exit() sau khi chuyển hướng
         } else {
             $error = "Tên đăng nhập hoặc mật khẩu không đúng.";
         }
