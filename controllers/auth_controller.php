@@ -6,24 +6,32 @@ if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Truy vấn kiểm tra tài khoản Admin
-    $query = "SELECT * FROM users WHERE username = '$username' AND role = 'admin'";
-    $result = $conn->query($query);
+    // Truy vấn kiểm tra tài khoản Admin trong cơ sở dữ liệu
+    $query = "SELECT * FROM users WHERE username = ? AND role = 'admin'";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
-        
+
         // Kiểm tra mật khẩu
         if (password_verify($password, $user['password'])) {
-            $_SESSION['admin'] = $user['username'];  // Lưu thông tin Admin vào session
+            // Đăng nhập thành công, thiết lập session cho Admin
+            $_SESSION['admin'] = $user['username'];
             header("Location: ../views/admin/dashboard.php");
             exit();
         } else {
+            // Sai mật khẩu
             $_SESSION['error'] = "Sai mật khẩu.";
             header("Location: ../views/user/login.php");
+            exit();
         }
     } else {
-        $_SESSION['error'] = "Tài khoản không hợp lệ hoặc không có quyền truy cập.";
+        // Sai tên đăng nhập hoặc tài khoản không có quyền Admin
+        $_SESSION['error'] = "Tên đăng nhập hoặc quyền truy cập không hợp lệ.";
         header("Location: ../views/user/login.php");
+        exit();
     }
 }
