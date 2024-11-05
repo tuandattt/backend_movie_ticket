@@ -11,7 +11,7 @@ if (!isset($_SESSION['admin'])) {
 // Lấy danh sách phim từ cơ sở dữ liệu
 $query = "SELECT movies.movie_id, movies.title, movies.poster, GROUP_CONCAT(genres.genre_name SEPARATOR ', ') AS genre_names, 
                  movies.duration, movies.director, movies.actors, movies.trailer_link, movies.release_date, 
-                 movies.status, movies.rating, movies.description
+                 IFNULL(movies.status, 'N/A') AS status, movies.rating, movies.description
           FROM movies
           JOIN movie_genres ON movies.movie_id = movie_genres.movie_id
           JOIN genres ON movie_genres.genre_id = genres.genre_id
@@ -29,6 +29,7 @@ $result = $conn->query($query);
 <body>
     <div class="container">
         <h2>Danh sách Phim</h2>
+        <a href="dashboard.php" class="back-btn">Quay lại Dashboard</a>
         <a href="add_movie.php" class="add-btn">Thêm phim mới</a>
         <table border="1" class="movie-table">
             <thead>

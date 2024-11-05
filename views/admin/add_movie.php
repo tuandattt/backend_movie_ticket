@@ -97,7 +97,7 @@ if (isset($_POST['add_movie'])) {
             <br>
             <label for="status">Trạng thái:</label>
             <select name="status" required>
-                <option value="coming_soon">Coming Soon</option>
+                <option value='coming_soon'>Coming Soon</option>
                 <option value="now_showing">Now Showing</option>
                 <option value="stopped">Stopped</option>
             </select>
