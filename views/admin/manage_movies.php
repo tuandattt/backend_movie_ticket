@@ -9,9 +9,13 @@ if (!isset($_SESSION['admin'])) {
 }
 
 // Lấy danh sách phim từ cơ sở dữ liệu
-$query = "SELECT movies.movie_id, movies.title, genres.genre_name, movies.duration, movies.director, movies.release_date
-          FROM movies 
-          JOIN genres ON movies.genre_id = genres.genre_id";
+$query = "SELECT movies.movie_id, movies.title, movies.poster, GROUP_CONCAT(genres.genre_name SEPARATOR ', ') AS genre_names, 
+                 movies.duration, movies.director, movies.actors, movies.trailer_link, movies.release_date, 
+                 movies.status, movies.rating, movies.description
+          FROM movies
+          JOIN movie_genres ON movies.movie_id = movie_genres.movie_id
+          JOIN genres ON movie_genres.genre_id = genres.genre_id
+          GROUP BY movies.movie_id";
 $result = $conn->query($query);
 ?>
 <!DOCTYPE html>
@@ -29,11 +33,17 @@ $result = $conn->query($query);
         <table border="1" class="movie-table">
             <thead>
                 <tr>
+                    <th>Poster</th>
                     <th>Tên phim</th>
                     <th>Thể loại</th>
                     <th>Thời lượng</th>
                     <th>Đạo diễn</th>
+                    <th>Diễn viên</th>
+                    <th>Trailer</th>
                     <th>Ngày phát hành</th>
+                    <th>Trạng thái</th>
+                    <th>Rating</th>
+                    <th>Mô tả</th>
                     <th>Tùy chọn</th>
                 </tr>
             </thead>
@@ -41,11 +51,17 @@ $result = $conn->query($query);
                 <?php if ($result->num_rows > 0): ?>
                     <?php while ($row = $result->fetch_assoc()): ?>
                         <tr>
+                            <td><img src="../../assets/images/<?php echo htmlspecialchars($row['poster']); ?>" alt="Poster" width="100"></td>
                             <td><?php echo htmlspecialchars($row['title']); ?></td>
-                            <td><?php echo htmlspecialchars($row['genre_name']); ?></td>
+                            <td><?php echo htmlspecialchars($row['genre_names']); ?></td>
                             <td><?php echo htmlspecialchars($row['duration']); ?> phút</td>
                             <td><?php echo htmlspecialchars($row['director']); ?></td>
+                            <td><?php echo htmlspecialchars($row['actors']); ?></td>
+                            <td><a href="<?php echo htmlspecialchars($row['trailer_link']); ?>" target="_blank">Xem trailer</a></td>
                             <td><?php echo htmlspecialchars(date("d/m/Y", strtotime($row['release_date']))); ?></td>
+                            <td><?php echo htmlspecialchars($row['status']); ?></td>
+                            <td><?php echo htmlspecialchars($row['rating']); ?></td>
+                            <td><?php echo htmlspecialchars($row['description']); ?></td>
                             <td>
                                 <a href="edit_movie.php?id=<?php echo $row['movie_id']; ?>" class="edit-btn">Chỉnh sửa</a>
                                 <a href="delete_movie.php?id=<?php echo $row['movie_id']; ?>" class="delete-btn" onclick="return confirm('Bạn có chắc chắn muốn xóa không?');">Xóa</a>
@@ -54,7 +70,7 @@ $result = $conn->query($query);
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6">Không có phim nào được tìm thấy.</td>
+                        <td colspan="12">Không có phim nào được tìm thấy.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

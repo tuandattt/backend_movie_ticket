@@ -44,16 +44,7 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
             <a href="../../controllers/logout.php" class="logout-btn">Đăng xuất</a>
         </header>
         
-        <nav>
-            <ul>
-                <li><a href="manage_movies.php">Quản lý Phim</a></li>
-                <li><a href="manage_users.php">Quản lý Người dùng</a></li>
-                <li><a href="manage_genres.php">Quản lý Thể loại Phim</a></li>
-                <li><a href="manage_schedules.php">Quản lý Lịch chiếu</a></li>
-                <li><a href="manage_promotions.php">Quản lý Khuyến mãi</a></li>
-                <li><a href="reports.php">Thống kê & Báo cáo</a></li>
-            </ul>
-        </nav>
+       
 
         <main>
             <section class="overview">
