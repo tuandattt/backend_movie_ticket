@@ -6,6 +6,26 @@ if (!isset($_SESSION['admin'])) {
     header("Location: ../user/login.php");
     exit();
 }
+
+// Kết nối đến cơ sở dữ liệu
+include '../../includes/config.php';
+
+// Lấy dữ liệu tổng quan từ cơ sở dữ liệu
+$total_movies_query = "SELECT COUNT(*) AS total_movies FROM movies";
+$total_movies_result = $conn->query($total_movies_query);
+$total_movies = $total_movies_result->fetch_assoc()['total_movies'];
+
+$total_users_query = "SELECT COUNT(*) AS total_users FROM users";
+$total_users_result = $conn->query($total_users_query);
+$total_users = $total_users_result->fetch_assoc()['total_users'];
+
+$total_schedules_query = "SELECT COUNT(*) AS total_schedules FROM schedules";
+$total_schedules_result = $conn->query($total_schedules_query);
+$total_schedules = $total_schedules_result->fetch_assoc()['total_schedules'];
+
+$today_revenue_query = "SELECT SUM(total_amount) AS today_revenue FROM orders WHERE DATE(order_date) = CURDATE()";
+$today_revenue_result = $conn->query($today_revenue_query);
+$today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
 ?>
 
 <!DOCTYPE html>
@@ -41,19 +61,19 @@ if (!isset($_SESSION['admin'])) {
                 <div class="stats">
                     <div class="stat">
                         <h3>Tổng số phim</h3>
-                        <p>123</p> <!-- Thay bằng dữ liệu từ cơ sở dữ liệu -->
+                        <p><?php echo $total_movies; ?></p>
                     </div>
                     <div class="stat">
                         <h3>Tổng số người dùng</h3>
-                        <p>456</p> <!-- Thay bằng dữ liệu từ cơ sở dữ liệu -->
+                        <p><?php echo $total_users; ?></p>
                     </div>
                     <div class="stat">
                         <h3>Số lịch chiếu</h3>
-                        <p>78</p> <!-- Thay bằng dữ liệu từ cơ sở dữ liệu -->
+                        <p><?php echo $total_schedules; ?></p>
                     </div>
                     <div class="stat">
                         <h3>Doanh thu hôm nay</h3>
-                        <p>$1000</p> <!-- Thay bằng dữ liệu từ cơ sở dữ liệu -->
+                        <p>$<?php echo number_format($today_revenue, 2); ?></p>
                     </div>
                 </div>
             </section>
