@@ -22,6 +22,7 @@ $result = $conn->query($query);
 <body>
     <div class="container">
         <h2>Quản lý Thể loại Phim</h2>
+        <a href="dashboard.php" class="back-btn">Quay lại Dashboard</a>
         <a href="add_genre.php" class="add-btn">Thêm thể loại mới</a>
         <table border="1" class="genre-table">
             <thead>
