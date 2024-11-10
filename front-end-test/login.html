@@ -1,0 +1,25 @@
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('loginModal')">X</span>
+        <div class="title">Đăng Nhập</div>
+        <form action="#">
+            <div class="field">
+                <input type="text" required>
+                <label>Email</label>
+            </div>
+            <div class="field">
+                <input type="password" required>
+                <label>Mật khẩu</label>
+            </div>
+            <div class="field">
+                <input type="submit" value="Đăng Nhập">
+            </div>
+            <div class="link">
+                Chưa có tài khoản? <a href="#" onclick="openModal('registerModal')">Đăng ký</a>
+            </div>
+            <div class="link">
+                <a href="#" onclick="openModal('forgotModal')">Quên mật khẩu?</a>
+            </div>
+        </form>
+    </div>
+</div>

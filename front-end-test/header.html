@@ -1,0 +1,92 @@
+<header>
+    <div class="top-header">
+        <div class="logo">
+            <img src="logo.png" alt="Logo" />
+        </div>
+        
+        <div class="theater-selection">
+            <span class="theater-text">Rạp:</span>
+            <select class="theater-dropdown">
+                <option value="alpha">Alpha</option>
+            </select>
+        </div>
+
+        <div class="menu">
+            <span class="phim menu-item">Phim</span>
+            <span class="menu-item">Nổi Bật</span>
+            <span class="menu-item">Đang Chiếu</span>
+            <span class="menu-item">Sắp Chiếu</span>
+        </div>
+
+        <div class="selection">
+            <button class="genre-btn">Thể Loại</button>
+            <div class="dropdown">
+                <div class="genre-grid">
+                    <label><input type="checkbox" value="action"> Hành Động</label>
+                    <label><input type="checkbox" value="comedy"> Hài</label>
+                    <label><input type="checkbox" value="drama"> Tâm Lý</label>
+                    <label><input type="checkbox" value="horror"> Kinh Dị</label>
+                    <label><input type="checkbox" value="sci-fi"> Khoa Học Viễn Tưởng</label>
+                    <label><input type="checkbox" value="romance"> Lãng Mạn</label>
+                    <label><input type="checkbox" value="animation"> Hoạt Hình</label>
+                    <label><input type="checkbox" value="adventure"> Phiêu Lưu</label>
+                    <label><input type="checkbox" value="mystery"> Bí Ẩn</label>
+                    <label><input type="checkbox" value="fantasy"> Thần Thoại</label>
+                </div>
+                <div class="couple">
+                    <button class="btn">Áp Dụng</button>
+                    <button class="btn">Xóa</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="selection">
+            <div class="filter-search">
+                <span class="filter-icon">
+                    <i class="fas fa-filter"></i>
+                </span>
+                <div class="dropdown">
+                    <label>Thời gian phát hành:</label>
+                    <div class="couple">
+                        <select class="comparison-dropdown" id="release-comparison">
+                            <option value="=">=</option>
+                            <option value=">">></option>
+                            <option value="<"><</option>
+                            <option value=">=">>=</option>
+                            <option value="<="><=</option>
+                        </select>
+                        <input type="date" class="filter-input" id="release-date">
+                    </div>
+                    <label>Đánh giá:</label>
+                    <div class="couple">
+                        <select class="comparison-dropdown" id="rating-comparison">
+                            <option value="=">=</option>
+                            <option value=">">></option>
+                            <option value="<"><</option>
+                            <option value=">=">>=</option>
+                            <option value="<="><=</option>
+                        </select>
+                        <input type="number" class="filter-input" id="rating" min="1" max="10" placeholder="Đánh giá (1-10)">
+                    </div>
+                    <div class="couple">
+                        <button class="btn">Áp Dụng</button>
+                        <button class="btn">Xóa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="couple">
+            <input type="text" class="search-bar" placeholder="Nhập từ khóa...">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+        </div>
+
+        <div class="couple">
+            <button class="btn" id="loginBtn" onclick="openModal('loginModal')">Đăng Nhập</button>
+            <button class="btn" id="registerBtn" onclick="openModal('registerModal')">Đăng Ký</button>
+        </div>        
+    </div>
+    <div id="notification-bar" class="notification-bar">
+        <span class="notification-text"></span>
+    </div>
+</header>
