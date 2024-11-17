@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 session_start();
 include '../../includes/config.php';
@@ -21,6 +19,18 @@ $comingSoonResult = $conn->query($comingSoonQuery);
 // Lấy các phim nổi bật (có đánh giá cao nhất)
 $featuredQuery = "SELECT * FROM movies ORDER BY rating DESC LIMIT 10";
 $featuredResult = $conn->query($featuredQuery);
+
+// Xử lý tìm kiếm thể loại
+$searchGenresResult = null;
+if (isset($_GET['search_genre']) && !empty($_GET['search_genre'])) {
+    $searchTerm = $_GET['search_genre'];
+    $searchGenresQuery = "SELECT * FROM genres WHERE genre_name LIKE ?";
+    $stmt = $conn->prepare($searchGenresQuery);
+    $likeTerm = "%" . $searchTerm . "%";
+    $stmt->bind_param("s", $likeTerm);
+    $stmt->execute();
+    $searchGenresResult = $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -36,11 +46,31 @@ $featuredResult = $conn->query($featuredQuery);
             <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
             <nav>
                 <a href="../../logout.php">Đăng xuất</a>
+                <a href="trending_and_new_movies.php">Phim thịnh hành</a>
             </nav>
         </div>
     </header>
 
     <div class="movies-section">
+        <!-- Phần tìm kiếm thể loại -->
+        <h2>Tìm Kiếm Thể Loại</h2>
+        <form action="" method="GET" class="genre-search-form">
+            <input type="text" name="search_genre" placeholder="Nhập tên thể loại..." value="<?php echo isset($_GET['search_genre']) ? htmlspecialchars($_GET['search_genre']) : ''; ?>">
+            <button type="submit">Tìm kiếm</button>
+        </form>
+        <div class="genre-list">
+            <?php if (isset($searchGenresResult) && $searchGenresResult->num_rows > 0): ?>
+                <?php while ($genre = $searchGenresResult->fetch_assoc()): ?>
+                    <a href="movies_by_genre.php?genre_id=<?php echo $genre['genre_id']; ?>" class="genre-item">
+                        <?php echo htmlspecialchars($genre['genre_name']); ?>
+                    </a>
+                <?php endwhile; ?>
+            <?php elseif (isset($searchGenresResult)): ?>
+                <p>Không tìm thấy thể loại nào phù hợp.</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Phần hiển thị phim đang chiếu -->
         <h2>Phim Đang Chiếu</h2>
         <div class="movie-list">
             <?php if ($nowShowingResult->num_rows > 0): ?>
@@ -56,6 +86,7 @@ $featuredResult = $conn->query($featuredQuery);
             <?php endif; ?>
         </div>
 
+        <!-- Phần hiển thị phim sắp chiếu -->
         <h2>Phim Sắp Chiếu</h2>
         <div class="movie-list">
             <?php if ($comingSoonResult->num_rows > 0): ?>
@@ -71,6 +102,7 @@ $featuredResult = $conn->query($featuredQuery);
             <?php endif; ?>
         </div>
 
+        <!-- Phần hiển thị phim nổi bật -->
         <h2>Phim Nổi Bật</h2>
         <div class="movie-list">
             <?php if ($featuredResult->num_rows > 0): ?>
@@ -88,4 +120,3 @@ $featuredResult = $conn->query($featuredQuery);
     </div>
 </body>
 </html>
->>>>>>> 4c2e2c4054197312eefee3cdfaac26f68551b85a
