@@ -4,7 +4,7 @@ include '../../includes/config.php';
 
 // Kiểm tra nếu người dùng chưa đăng nhập, chuyển hướng tới trang đăng nhập
 if (!isset($_SESSION['user'])) {
-    header("Location: login.php");
+    header("Location: ../../views/user/login.php");
     exit();
 }
 
@@ -30,8 +30,12 @@ $featuredResult = $conn->query($featuredQuery);
 </head>
 <body>
     <header>
-        <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
-        <a href="../../logout.php">Đăng xuất</a> <!-- Nút đăng xuất điều chỉnh lại đường dẫn -->
+        <div class="header-content">
+            <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
+            <nav>
+                <a href="../../logout.php">Đăng xuất</a>
+            </nav>
+        </div>
     </header>
 
     <div class="movies-section">
@@ -40,8 +44,9 @@ $featuredResult = $conn->query($featuredQuery);
             <?php if ($nowShowingResult->num_rows > 0): ?>
                 <?php while ($movie = $nowShowingResult->fetch_assoc()): ?>
                     <div class="movie-item">
-                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
                         <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($movie['description']); ?></p>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
@@ -54,8 +59,9 @@ $featuredResult = $conn->query($featuredQuery);
             <?php if ($comingSoonResult->num_rows > 0): ?>
                 <?php while ($movie = $comingSoonResult->fetch_assoc()): ?>
                     <div class="movie-item">
-                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
                         <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($movie['description']); ?></p>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
@@ -68,8 +74,9 @@ $featuredResult = $conn->query($featuredQuery);
             <?php if ($featuredResult->num_rows > 0): ?>
                 <?php while ($movie = $featuredResult->fetch_assoc()): ?>
                     <div class="movie-item">
-                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
                         <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
+                        <p><?php echo htmlspecialchars($movie['description']); ?></p>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
