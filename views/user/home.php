@@ -3,12 +3,12 @@ session_start();
 include '../../includes/config.php';
 
 // Kiểm tra nếu người dùng chưa đăng nhập
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: ../../views/user/login.php");
     exit();
 }
 
-// Lấy các phim mặc định
+// Lấy danh sách phim: Đang chiếu, Sắp chiếu, và Nổi bật
 $nowShowingQuery = "SELECT * FROM movies WHERE status = 'now_showing' LIMIT 10";
 $nowShowingResult = $conn->query($nowShowingQuery);
 
@@ -23,60 +23,73 @@ $featuredResult = $conn->query($featuredQuery);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Chủ - Movie Booking</title>
-    <link rel="stylesheet" href="../../assets/css/style.css">
 </head>
 <body>
     <header>
-        <div class="header-content">
-            <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['user']); ?>!</h1>
-            <nav>
-                <a href="../../logout.php">Đăng xuất</a>
-                <a href="trending_and_new_movies.php">Phim thịnh hành</a>
-                <a href="search.php">Tìm kiếm</a>
-            </nav>
-        </div>
+        <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+        <nav>
+            <a href="trending_and_new_movies.php">Phim Mới & Thịnh Hành</a>
+            <a href="search.php">Tìm kiếm</a>
+            <a href="../../logout.php">Đăng xuất</a>
+        </nav>
     </header>
 
-    <div class="movies-section">
-        <h2>Phim Đang Chiếu</h2>
-        <div class="movie-list">
-            <?php while ($movie = $nowShowingResult->fetch_assoc()): ?>
-                <div class="movie-item">
-                    <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
-                    <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($movie['description']); ?></p>
-                    <!-- Liên kết đến movie_details.php -->
-                    <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>" class="details-link">Xem Chi Tiết</a>
-                </div>
-            <?php endwhile; ?>
-        </div>
+    <main>
+        <!-- Phim Đang Chiếu -->
+        <section>
+            <h2>Phim Đang Chiếu</h2>
+            <ul>
+                <?php if ($nowShowingResult->num_rows > 0): ?>
+                    <?php while ($movie = $nowShowingResult->fetch_assoc()): ?>
+                        <li>
+                            <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
+                            <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
+                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                        </li>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>Không có phim đang chiếu.</p>
+                <?php endif; ?>
+            </ul>
+        </section>
 
-        <h2>Phim Sắp Chiếu</h2>
-        <div class="movie-list">
-            <?php while ($movie = $comingSoonResult->fetch_assoc()): ?>
-                <div class="movie-item">
-                    <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
-                    <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($movie['description']); ?></p>
-                    <!-- Liên kết đến movie_details.php -->
-                    <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>" class="details-link">Xem Chi Tiết</a>
-                </div>
-            <?php endwhile; ?>
-        </div>
+        <!-- Phim Sắp Chiếu -->
+        <section>
+            <h2>Phim Sắp Chiếu</h2>
+            <ul>
+                <?php if ($comingSoonResult->num_rows > 0): ?>
+                    <?php while ($movie = $comingSoonResult->fetch_assoc()): ?>
+                        <li>
+                            <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
+                            <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
+                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                        </li>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>Không có phim sắp chiếu.</p>
+                <?php endif; ?>
+            </ul>
+        </section>
 
-        <h2>Phim Nổi Bật</h2>
-        <div class="movie-list">
-            <?php while ($movie = $featuredResult->fetch_assoc()): ?>
-                <div class="movie-item">
-                    <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" />
-                    <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
-                    <p><?php echo htmlspecialchars($movie['description']); ?></p>
-                    <!-- Liên kết đến movie_details.php -->
-                    <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>" class="details-link">Xem Chi Tiết</a>
-                </div>
-            <?php endwhile; ?>
-        </div>
-    </div>
+        <!-- Phim Nổi Bật -->
+        <section>
+            <h2>Phim Nổi Bật</h2>
+            <ul>
+                <?php if ($featuredResult->num_rows > 0): ?>
+                    <?php while ($movie = $featuredResult->fetch_assoc()): ?>
+                        <li>
+                            <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
+                            <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
+                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                        </li>
+                    <?php endwhile; ?>
+                <?php else: ?>
+                    <p>Không có phim nổi bật.</p>
+                <?php endif; ?>
+            </ul>
+        </section>
+    </main>
 </body>
 </html>

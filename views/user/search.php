@@ -3,59 +3,52 @@ session_start();
 include '../../includes/config.php';
 
 // Kiểm tra nếu người dùng chưa đăng nhập
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user_id'])) {
     header("Location: ../../views/user/login.php");
     exit();
 }
 
-// Xử lý tìm kiếm nâng cao
+// Nhận dữ liệu tìm kiếm từ phương thức GET
 $searchTitle = isset($_GET['search_title']) ? trim($_GET['search_title']) : '';
 $searchRatingMin = isset($_GET['rating_min']) && $_GET['rating_min'] !== '' ? (float)$_GET['rating_min'] : null;
 $searchRatingMax = isset($_GET['rating_max']) && $_GET['rating_max'] !== '' ? (float)$_GET['rating_max'] : null;
 $searchStatus = isset($_GET['status']) && $_GET['status'] !== '' ? $_GET['status'] : '';
 $searchGenre = isset($_GET['genre_id']) && $_GET['genre_id'] !== '' ? (int)$_GET['genre_id'] : null;
 
-// Truy vấn chính cho tìm kiếm
-$searchQuery = "
-    SELECT DISTINCT movies.* 
-    FROM movies 
-    LEFT JOIN movie_genres ON movies.movie_id = movie_genres.movie_id 
+// Truy vấn cơ sở dữ liệu
+$query = "
+    SELECT DISTINCT m.*
+    FROM movies AS m
+    LEFT JOIN movie_genres AS mg ON m.movie_id = mg.movie_id
     WHERE 1=1";
-
-if (!empty($searchTitle)) {
-    $searchQuery .= " AND movies.title LIKE ?";
-}
-if ($searchRatingMin !== null && $searchRatingMax !== null) {
-    $searchQuery .= " AND movies.rating BETWEEN ? AND ?";
-}
-if (!empty($searchStatus)) {
-    $searchQuery .= " AND movies.status = ?";
-}
-if ($searchGenre !== null) {
-    $searchQuery .= " AND movie_genres.genre_id = ?";
-}
-
-$stmt = $conn->prepare($searchQuery);
 
 $bindTypes = '';
 $bindParams = [];
+
+// Điều kiện tìm kiếm
 if (!empty($searchTitle)) {
+    $query .= " AND m.title LIKE ?";
     $bindTypes .= 's';
     $bindParams[] = '%' . $searchTitle . '%';
 }
 if ($searchRatingMin !== null && $searchRatingMax !== null) {
+    $query .= " AND m.rating BETWEEN ? AND ?";
     $bindTypes .= 'dd';
     $bindParams[] = $searchRatingMin;
     $bindParams[] = $searchRatingMax;
 }
 if (!empty($searchStatus)) {
+    $query .= " AND m.status = ?";
     $bindTypes .= 's';
     $bindParams[] = $searchStatus;
 }
 if ($searchGenre !== null) {
+    $query .= " AND mg.genre_id = ?";
     $bindTypes .= 'i';
     $bindParams[] = $searchGenre;
 }
+
+$stmt = $conn->prepare($query);
 
 if (!empty($bindParams)) {
     $stmt->bind_param($bindTypes, ...$bindParams);
@@ -64,7 +57,7 @@ if (!empty($bindParams)) {
 $stmt->execute();
 $searchResult = $stmt->get_result();
 
-// Lấy danh sách thể loại
+// Truy vấn danh sách thể loại
 $genresQuery = "SELECT * FROM genres";
 $genresResult = $conn->query($genresQuery);
 ?>
@@ -113,11 +106,12 @@ $genresResult = $conn->query($genresQuery);
             <?php if ($searchResult->num_rows > 0): ?>
                 <?php while ($movie = $searchResult->fetch_assoc()): ?>
                     <div class="movie-item">
-                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
+                        <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster'] ?: 'default.jpg'); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>">
                         <h3><?php echo htmlspecialchars($movie['title']); ?></h3>
                         <p><strong>Rating:</strong> <?php echo htmlspecialchars($movie['rating']); ?></p>
                         <p><strong>Trạng thái:</strong> <?php echo htmlspecialchars($movie['status']); ?></p>
-                        <p><?php echo htmlspecialchars($movie['description']); ?></p>
+                        <p><?php echo htmlspecialchars(substr($movie['description'], 0, 100)); ?>...</p>
+                        <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem chi tiết</a>
                     </div>
                 <?php endwhile; ?>
             <?php else: ?>
