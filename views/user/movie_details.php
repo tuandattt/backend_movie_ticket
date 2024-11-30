@@ -36,6 +36,32 @@ if ($result->num_rows === 0) {
 }
 
 $movie = $result->fetch_assoc();
+
+// Lấy thông tin đánh giá
+$reviewsQuery = "
+    SELECT r.rating, r.comment, r.review_date, u.username 
+    FROM reviews r
+    JOIN users u ON r.user_id = u.user_id
+    WHERE r.movie_id = ?
+    ORDER BY r.review_date DESC
+";
+$stmt = $conn->prepare($reviewsQuery);
+$stmt->bind_param("i", $movie_id);
+$stmt->execute();
+$reviewsResult = $stmt->get_result();
+
+// Lấy thông tin bình luận
+$commentsQuery = "
+    SELECT c.comment_text, c.comment_date, u.username 
+    FROM comments c
+    JOIN users u ON c.user_id = u.user_id
+    WHERE c.movie_id = ?
+    ORDER BY c.comment_date DESC
+";
+$stmt = $conn->prepare($commentsQuery);
+$stmt->bind_param("i", $movie_id);
+$stmt->execute();
+$commentsResult = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -45,6 +71,7 @@ $movie = $result->fetch_assoc();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chi Tiết Phim - <?php echo htmlspecialchars($movie['title']); ?></title>
     <style>
+        /* CSS giữ nguyên từ phiên bản cũ */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -63,7 +90,7 @@ $movie = $result->fetch_assoc();
             text-decoration: none;
             margin: 0 10px;
         }
-        .movie-details, .trailer-section, .booking-section {
+        .movie-details, .trailer-section, .booking-section, .reviews-section, .comments-section {
             margin: 20px auto;
             width: 80%;
             max-width: 900px;
@@ -76,20 +103,15 @@ $movie = $result->fetch_assoc();
             max-width: 100%;
             border-radius: 8px;
         }
-        .details h2, .trailer-section h2, .booking-section h2 {
+        .details h2, .trailer-section h2, .booking-section h2, .reviews-section h2, .comments-section h2 {
             color: #007BFF;
         }
-        .booking-button {
-            display: inline-block;
-            padding: 10px 20px;
-            color: #fff;
-            background-color: #28a745;
-            text-decoration: none;
-            border-radius: 5px;
-            margin-top: 10px;
+        .form-section {
+            margin-top: 20px;
         }
-        .booking-button:hover {
-            background-color: #218838;
+        .form-section textarea, .form-section select {
+            width: 100%;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -138,6 +160,65 @@ $movie = $result->fetch_assoc();
     <div class="booking-section">
         <h2>Đặt Vé</h2>
         <a href="booking.php?movie_id=<?php echo $movie['movie_id']; ?>" class="booking-button">Đặt vé ngay</a>
+    </div>
+
+    <div class="reviews-section">
+        <h2>Đánh Giá</h2>
+        <?php if ($reviewsResult->num_rows > 0): ?>
+            <?php while ($review = $reviewsResult->fetch_assoc()): ?>
+                <div>
+                    <strong><?php echo htmlspecialchars($review['username']); ?></strong> - 
+                    <?php echo htmlspecialchars($review['rating']); ?>/5 
+                    <small>(<?php echo htmlspecialchars($review['review_date']); ?>)</small>
+                    <p><?php echo htmlspecialchars($review['comment']); ?></p>
+                </div>
+                <hr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>Chưa có đánh giá nào.</p>
+        <?php endif; ?>
+
+        <h3>Viết Đánh Giá</h3>
+        <form action="../../controllers/ReviewController.php" method="POST">
+            <input type="hidden" name="action" value="add_review">
+            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>">
+            <label for="rating">Đánh Giá:</label>
+            <select name="rating" id="rating" required>
+                <option value="5">5 - Xuất sắc</option>
+                <option value="4">4 - Tốt</option>
+                <option value="3">3 - Trung bình</option>
+                <option value="2">2 - Kém</option>
+                <option value="1">1 - Tệ</option>
+            </select><br>
+            <label for="comment">Nhận Xét:</label><br>
+            <textarea name="comment" id="comment" rows="4" required></textarea><br>
+            <button type="submit">Gửi Đánh Giá</button>
+        </form>
+    </div>
+
+    <div class="comments-section">
+        <h2>Bình Luận</h2>
+        <?php if ($commentsResult->num_rows > 0): ?>
+            <?php while ($comment = $commentsResult->fetch_assoc()): ?>
+                <div>
+                    <strong><?php echo htmlspecialchars($comment['username']); ?></strong> 
+                    <small>(<?php echo htmlspecialchars($comment['comment_date']); ?>)</small>
+                    <p><?php echo htmlspecialchars($comment['comment_text']); ?></p>
+                </div>
+                <hr>
+            <?php endwhile; ?>
+        <?php else: ?>
+            <p>Chưa có bình luận nào.</p>
+        <?php endif; ?>
+
+        <h3>Viết Bình Luận</h3>
+        <form action="../../controllers/ReviewController.php" method="POST">
+            <input type="hidden" name="action" value="add_comment">
+            <input type="hidden" name="movie_id" value="<?php echo $movie_id; ?>">
+            <label for="comment_text">Bình Luận:</label><br>
+            <textarea name="comment_text" id="comment_text" rows="4" required></textarea><br>
+            <button type="submit">Gửi Bình Luận</button>
+        </form>
     </div>
 </body>
 </html>

@@ -8,31 +8,69 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Lấy ID phim từ URL
-$movieId = isset($_GET['movie_id']) ? (int)$_GET['movie_id'] : null;
+// Lấy thông tin lịch chiếu từ URL
+$scheduleId = isset($_GET['schedule_id']) ? (int)$_GET['schedule_id'] : null;
 
-if (!$movieId) {
-    echo "Vui lòng chọn phim để đặt vé.";
+if (!$scheduleId) {
+    echo "Vui lòng chọn lịch chiếu.";
     exit();
 }
 
-// Lấy thông tin lịch chiếu của phim
+// Lấy thông tin lịch chiếu
 $query = "
-    SELECT schedules.*, movies.title AS movie_title
-    FROM schedules
-    JOIN movies ON schedules.movie_id = movies.movie_id
-    WHERE schedules.movie_id = ? AND schedules.available_seats > 0
+    SELECT s.schedule_id, s.show_date, s.show_time, s.theater, s.available_seats, m.title, m.poster
+    FROM schedules s
+    JOIN movies m ON s.movie_id = m.movie_id
+    WHERE s.schedule_id = ?
 ";
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $movieId);
+$stmt->bind_param("i", $scheduleId);
 $stmt->execute();
 $result = $stmt->get_result();
-$schedules = $result->fetch_all(MYSQLI_ASSOC);
+$schedule = $result->fetch_assoc();
 
-// Kiểm tra nếu không có lịch chiếu
-if (count($schedules) === 0) {
-    echo "Không có lịch chiếu khả dụng cho phim này.";
+if (!$schedule) {
+    echo "Lịch chiếu không tồn tại.";
     exit();
+}
+
+// Xử lý đặt vé
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $seatNumber = trim($_POST['seat_number']);
+
+    // Kiểm tra ghế có khả dụng không
+    $checkSeatQuery = "
+        SELECT * FROM bookings 
+        WHERE schedule_id = ? AND seat_number = ?
+    ";
+    $stmt = $conn->prepare($checkSeatQuery);
+    $stmt->bind_param("is", $scheduleId, $seatNumber);
+    $stmt->execute();
+    $seatResult = $stmt->get_result();
+
+    if ($seatResult->num_rows > 0) {
+        $error = "Ghế đã được đặt.";
+    } else {
+        // Đặt vé
+        $insertBooking = "
+            INSERT INTO bookings (user_id, schedule_id, seat_number, booking_date, status)
+            VALUES (?, ?, ?, NOW(), 'booked')
+        ";
+        $stmt = $conn->prepare($insertBooking);
+        $stmt->bind_param("iis", $_SESSION['user_id'], $scheduleId, $seatNumber);
+
+        if ($stmt->execute()) {
+            // Cập nhật số ghế khả dụng
+            $updateSeatsQuery = "UPDATE schedules SET available_seats = available_seats - 1 WHERE schedule_id = ?";
+            $stmt = $conn->prepare($updateSeatsQuery);
+            $stmt->bind_param("i", $scheduleId);
+            $stmt->execute();
+
+            $success = "Đặt vé thành công!";
+        } else {
+            $error = "Không thể đặt vé. Vui lòng thử lại.";
+        }
+    }
 }
 ?>
 
@@ -40,102 +78,34 @@ if (count($schedules) === 0) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đặt Vé - <?php echo htmlspecialchars($schedules[0]['movie_title']); ?></title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-        }
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 10px 20px;
-        }
-        header .header-content h1 {
-            margin: 0;
-        }
-        header nav a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-        }
-        header nav a:hover {
-            text-decoration: underline;
-        }
-        .booking-page {
-            margin: 20px auto;
-            width: 90%;
-            max-width: 600px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        h2 {
-            color: #007BFF;
-            text-align: center;
-        }
-        label {
-            font-weight: bold;
-            display: block;
-            margin: 10px 0 5px;
-        }
-        select, input[type="number"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #218838;
-        }
-        .error {
-            color: red;
-        }
-    </style>
+    <title>Đặt Vé - <?php echo htmlspecialchars($schedule['title']); ?></title>
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1>Xin chào, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-            <nav>
-                <a href="../../logout.php">Đăng xuất</a>
-                <a href="home.php">Trang Chủ</a>
-            </nav>
-        </div>
-    </header>
+    <h1>Đặt Vé Xem Phim</h1>
 
-    <div class="booking-page">
-        <h2>Đặt Vé - <?php echo htmlspecialchars($schedules[0]['movie_title']); ?></h2>
-        <form action="process_booking.php" method="POST">
-            <input type="hidden" name="movie_id" value="<?php echo $movieId; ?>">
-            <label for="schedule">Chọn Lịch Chiếu:</label>
-            <select name="schedule_id" id="schedule" required>
-                <?php foreach ($schedules as $schedule): ?>
-                    <option value="<?php echo $schedule['schedule_id']; ?>">
-                        <?php echo htmlspecialchars($schedule['show_date'] . " - " . $schedule['show_time'] . " - " . $schedule['theater']); ?> 
-                        (Còn <?php echo $schedule['available_seats']; ?> ghế)
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <label for="seats">Chọn Số Ghế:</label>
-            <input type="number" name="seats" id="seats" min="1" max="<?php echo $schedules[0]['available_seats']; ?>" required>
-            <button type="submit">Xác Nhận</button>
+    <!-- Hiển thị thông tin phim -->
+    <section>
+        <h2>Thông Tin Phim</h2>
+        <img src="../../assets/images/<?php echo htmlspecialchars($schedule['poster']); ?>" alt="<?php echo htmlspecialchars($schedule['title']); ?>" width="200">
+        <p><strong>Tên Phim:</strong> <?php echo htmlspecialchars($schedule['title']); ?></p>
+        <p><strong>Ngày Chiếu:</strong> <?php echo htmlspecialchars($schedule['show_date']); ?></p>
+        <p><strong>Giờ Chiếu:</strong> <?php echo htmlspecialchars($schedule['show_time']); ?></p>
+        <p><strong>Rạp:</strong> <?php echo htmlspecialchars($schedule['theater']); ?></p>
+        <p><strong>Ghế khả dụng:</strong> <?php echo htmlspecialchars($schedule['available_seats']); ?></p>
+    </section>
+
+    <!-- Hiển thị form đặt vé -->
+    <section>
+        <h2>Chọn Ghế</h2>
+        <?php if (isset($error)) echo "<p style='color:red;'>$error</p>"; ?>
+        <?php if (isset($success)) echo "<p style='color:green;'>$success</p>"; ?>
+        <form method="POST" action="">
+            <label for="seat_number">Nhập Số Ghế:</label><br>
+            <input type="text" id="seat_number" name="seat_number" required><br><br>
+            <button type="submit">Xác Nhận Đặt Vé</button>
         </form>
-    </div>
+    </section>
+
+    <a href="home.php">Quay lại Trang Chủ</a>
 </body>
 </html>

@@ -36,32 +36,10 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $bookingResult = $stmt->get_result();
 
-// Lấy danh sách phim yêu thích của người dùng
-$favoritesQuery = "
-    SELECT r.review_id, m.movie_id, m.title, m.poster
-    FROM reviews r
-    JOIN movies m ON r.movie_id = m.movie_id
-    WHERE r.user_id = ? AND r.rating >= 4
-    ORDER BY r.review_date DESC
-";
-$stmt = $conn->prepare($favoritesQuery);
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$favoritesResult = $stmt->get_result();
-
-// Xóa phim yêu thích (nếu có yêu cầu)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_favorite'])) {
-    $reviewId = (int)$_POST['review_id'];
-    $deleteQuery = "DELETE FROM reviews WHERE review_id = ? AND user_id = ?";
-    $stmt = $conn->prepare($deleteQuery);
-    $stmt->bind_param("ii", $reviewId, $userId);
-    if ($stmt->execute()) {
-        header("Location: profile.php");
-        exit();
-    } else {
-        $error = "Không thể xóa phim yêu thích.";
-    }
-}
+// Xử lý các thông báo (success/error)
+$successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : null;
+$errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : null;
+unset($_SESSION['success_message'], $_SESSION['error_message']);
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +47,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_favorite'])) {
 <head>
     <meta charset="UTF-8">
     <title>Hồ Sơ Cá Nhân</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        img {
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
     <h1>Hồ Sơ Cá Nhân</h1>
+
+    <?php if ($successMessage): ?>
+        <p style="color:green;"><?php echo htmlspecialchars($successMessage); ?></p>
+    <?php endif; ?>
+    <?php if ($errorMessage): ?>
+        <p style="color:red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+    <?php endif; ?>
 
     <!-- Hiển thị thông tin cá nhân -->
     <section>
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_favorite'])) {
     <section>
         <h2>Lịch Sử Đặt Vé</h2>
         <?php if ($bookingResult->num_rows > 0): ?>
-            <table border="1">
+            <table>
                 <thead>
                     <tr>
                         <th>ID Đặt Vé</th>
@@ -123,40 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_favorite'])) {
             </table>
         <?php else: ?>
             <p>Bạn chưa đặt vé nào.</p>
-        <?php endif; ?>
-    </section>
-
-    <!-- Hiển thị danh sách phim yêu thích -->
-    <section>
-        <h2>Phim Yêu Thích</h2>
-        <?php if ($favoritesResult->num_rows > 0): ?>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Tên Phim</th>
-                        <th>Poster</th>
-                        <th>Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php while ($favorite = $favoritesResult->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($favorite['title']); ?></td>
-                            <td>
-                                <img src="../../assets/images/<?php echo htmlspecialchars($favorite['poster']); ?>" alt="<?php echo htmlspecialchars($favorite['title']); ?>" width="50">
-                            </td>
-                            <td>
-                                <form method="POST" action="">
-                                    <input type="hidden" name="review_id" value="<?php echo $favorite['review_id']; ?>">
-                                    <button type="submit" name="delete_favorite">Xóa</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>Bạn chưa có phim yêu thích nào.</p>
         <?php endif; ?>
     </section>
 </body>
