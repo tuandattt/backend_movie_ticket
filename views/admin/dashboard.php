@@ -1,13 +1,11 @@
 <?php
 session_start();
 
-// Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
-    header("Location: ../user/login.php");
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: ../../views/user/login.php");
     exit();
 }
 
-// Kết nối đến cơ sở dữ liệu
 include '../../includes/config.php';
 
 // Lấy dữ liệu tổng quan từ cơ sở dữ liệu
@@ -40,7 +38,7 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
     <div class="dashboard-container">
         <header>
             <h1>Welcome to Admin Dashboard</h1>
-            <p>Xin chào, <?php echo $_SESSION['admin']; ?>!</p>
+            <p>Xin chào, <?php echo $_SESSION['username']; ?>!</p>
             <a href="../../controllers/logout.php" class="logout-btn">Đăng xuất</a>
         </header>
         

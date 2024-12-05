@@ -2,12 +2,10 @@
 session_start();
 include '../../includes/config.php';
 
-// Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../../views/user/login.php");
     exit();
 }
-
 // Lấy thông tin phim hiện tại từ cơ sở dữ liệu
 $id = $_GET['id'];
 $query = "SELECT * FROM movies WHERE movie_id = ?";

@@ -3,10 +3,12 @@ session_start();
 include '../../includes/config.php';
 
 // Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../../views/user/login.php");
     exit();
 }
+
+
 
 if (isset($_POST['add_genre'])) {
     $genre_name = $_POST['genre_name'];
