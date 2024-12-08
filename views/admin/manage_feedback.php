@@ -34,7 +34,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             const response = await fetch('/movie_booking/controllers/admin_feedback_controller.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+<<<<<<< HEAD
                 body: `action=delete_review&review_id=${review_id}`
+=======
+                body: action=delete_review&review_id=${review_id}
+>>>>>>> 67a3615e9431b7f862e6b7efa6f24d1c85deb607
             });
             const result = await response.json();
             alert(result.message);
@@ -64,7 +68,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
             const response = await fetch('/movie_booking/controllers/admin_feedback_controller.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+<<<<<<< HEAD
                 body: `action=delete_comment&comment_id=${comment_id}`
+=======
+                body: action=delete_comment&comment_id=${comment_id}
+>>>>>>> 67a3615e9431b7f862e6b7efa6f24d1c85deb607
             });
             const result = await response.json();
             alert(result.message);
@@ -86,5 +94,9 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     <h2>Bình Luận</h2>
     <div id="comments"></div>
 </body>
+<<<<<<< HEAD
 </html>
 
+=======
+</html>
+>>>>>>> 67a3615e9431b7f862e6b7efa6f24d1c85deb607
