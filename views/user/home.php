@@ -46,7 +46,8 @@ $featuredResult = $conn->query($featuredQuery);
                         <li>
                             <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
                             <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
-                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                            <a href="movie_details.php?movie_id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+
                         </li>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -64,7 +65,8 @@ $featuredResult = $conn->query($featuredQuery);
                         <li>
                             <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
                             <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
-                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                            <a href="movie_details.php?movie_id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+
                         </li>
                     <?php endwhile; ?>
                 <?php else: ?>
@@ -82,7 +84,8 @@ $featuredResult = $conn->query($featuredQuery);
                         <li>
                             <strong><?php echo htmlspecialchars($movie['title']); ?></strong><br>
                             <img src="../../assets/images/<?php echo htmlspecialchars($movie['poster']); ?>" alt="<?php echo htmlspecialchars($movie['title']); ?>" width="100"><br>
-                            <a href="movie_details.php?id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+                            <a href="movie_details.php?movie_id=<?php echo $movie['movie_id']; ?>">Xem Chi Tiết</a>
+
                         </li>
                     <?php endwhile; ?>
                 <?php else: ?>
