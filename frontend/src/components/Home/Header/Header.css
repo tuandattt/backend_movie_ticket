@@ -1,0 +1,133 @@
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  background-color: #70d2ed; /* Tông màu xanh cùng tông với giao diện */
+  color: white;
+  font-family: "Bahnschrift", sans-serif; /* Đồng bộ với giao diện đăng nhập */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-weight: bolder;
+  height: 75px;
+  position: sticky; /* Đảm bảo header-container cuộn theo và dính trên cùng */
+  top: 0px; /* Đặt vị trí dính dưới top-heading */
+  z-index: 1000; /* Đảm bảo header-container không bị che khuất */
+}
+
+.header-logo {
+  height: 135px; /* Chiều cao tối đa cho logo */
+  width: auto; /* Tự động điều chỉnh chiều rộng để giữ tỉ lệ */
+  object-fit: contain; /* Đảm bảo hình ảnh không bị méo */
+  margin-left: 54px;
+  max-width: 150px;
+  padding-top: 6px;
+}
+
+.header-menu {
+  list-style: none;
+  display: flex;
+  gap: 21px;
+  padding-right: 24px;
+  padding-top: 6px;
+}
+
+.header-menu li {
+  cursor: pointer;
+  font-size: 21px;
+  padding: 12px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.header-menu li:hover {
+  background-color: #fff;
+  color: #70d2ed;
+  transform: scale(1.1);
+}
+
+.header-menu li:active {
+  transform: scale(0.95);
+}
+
+.top-heading {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 42px;
+  background-color: #000; /* Nền đen */
+  gap: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-family: "Bahnschrift", sans-serif;
+  position: sticky; /* Dùng sticky để top-heading dính khi cuộn */
+  top: 0; /* Đảm bảo nó dính ở trên cùng khi cuộn */
+  z-index: 999; /* Đảm bảo top-heading luôn ở trên cùng */
+}
+
+.top-heading a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 0px;
+  transition: color 0.3s ease;
+}
+
+.top-heading a:hover {
+  color: #70d2ed; /* Màu xanh nhạt khi hover */
+}
+
+.top-heading .user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-heading .logout-button {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.top-heading .logout-button:hover {
+  color: #70d2ed;
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 10px; /* Giảm padding cho màn hình nhỏ */
+  }
+
+  .header-logo {
+    height: 135px;
+    margin: 0; /* Giảm chiều cao logo khi màn hình nhỏ */
+  }
+
+  .header-menu {
+    display: flex;
+    gap: 9px;
+    justify-content: center; /* Căn giữa menu */
+  }
+
+  .header-menu li {
+    font-size: 16px; /* Giảm kích thước chữ */
+    padding: 9px 12px; /* Giảm padding của các mục menu */
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-menu {
+    gap: 6px; /* Giảm khoảng cách menu trên màn hình rất nhỏ */
+  }
+
+  .header-logo {
+    height: 135px; /* Giảm chiều cao logo */
+  }
+
+  .header-menu li {
+    font-size: 12px; /* Giảm kích thước chữ cho các mục menu */
+    padding: 6px 9px; /* Giảm padding cho các mục menu */
+    white-space: nowrap;
+  }
+}

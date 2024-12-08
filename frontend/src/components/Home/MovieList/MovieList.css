@@ -1,0 +1,171 @@
+/* Movie list container */
+.movie-list-container {
+  max-width: 1200px; /* Chiều rộng tối đa */
+  margin: 0 auto; /* Căn giữa container */
+  padding: 20px;
+  background-color: #70d2ed; /* Nền xanh */
+}
+.tabs-wrapper {
+  display: flex; /* Giữ flex để căn giữa */
+  justify-content: center; /* Căn giữa phần tử con */
+}
+
+.tabs {
+  display: inline-flex;
+  justify-content: center;
+
+  margin-top: 27px;
+  margin-bottom: 45px;
+  border-bottom: 2px solid #ccc;
+}
+
+.tab {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  background: none;
+  color: black;
+  cursor: pointer;
+  transition: color 0.3s, border-bottom 0.3s;
+}
+
+.tab.active {
+  color: white;
+  border-bottom: 4px solid white;
+  width: fit-content;
+}
+
+.tab:hover {
+  color: white;
+}
+
+/* Movie list grid */
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 cột cố định */
+  gap: 0px;
+  place-items: center; /* Căn giữa nội dung trong mỗi ô */
+  margin-bottom: 45px;
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+/* Movie item */
+.movie-item {
+  background: white;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  width: 100%; /* Đảm bảo các item chiếm đủ chiều rộng */
+  max-width: 250px; /* Đặt chiều rộng tối đa */
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-bottom: 24px;
+}
+
+/* Hover effect */
+.movie-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Movie item image */
+.movie-item img {
+  width: 100%;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+/* Movie item text */
+.movie-item h3 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333; /* Màu tiêu đề */
+  margin-bottom: 6px;
+}
+
+.movie-item p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 3px;
+}
+
+/* Button mua vé */
+.buy-ticket-button {
+  background-color: #fff;
+  color: #70d2ed;
+  border: 3px solid #70d2ed;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  align-self: center;
+  margin-top: 6px;
+  width: 100%;
+}
+
+.buy-ticket-button:hover {
+  background-color: #70d2ed;
+  color: white;
+}
+
+/* Khi không có phim */
+.no-movies {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 45px;
+}
+
+/* Thêm phần ngày khởi chiếu */
+.movie-item .release-date {
+  font-weight: bold;
+  color: #333;
+  margin-top: 5px;
+}
+
+@media (max-width: 1200px) {
+
+  .movie-list-container{
+    width: 100%;
+  }
+  .movie-list {
+    display: flex;
+    flex-direction: column; /* Chuyển thành 1 cột */
+    gap: 20px; /* Khoảng cách giữa các item */
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .movie-item {
+    max-width: 100%; /* Đảm bảo mỗi movie-item chiếm toàn bộ chiều rộng */
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+  }
+  .movie-item img {
+    width: 40%; /* Chiếm khoảng 40% chiều rộng */
+    max-width: 150px; /* Đặt kích thước tối đa cho ảnh */
+    margin-right: 15px; /* Tạo khoảng cách giữa ảnh và phần thông tin */
+  }
+
+  .movie-item-content {
+    width: 100%; /* Chiếm khoảng 60% chiều rộng */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .movie-item h3 {
+    font-size: 16px; /* Giảm kích thước chữ tiêu đề */
+    margin-bottom: 10px;
+  }
+
+  .buy-ticket-button {
+    margin-top: 10px; /* Tạo khoảng cách giữa nút mua vé và thông tin */
+    margin-left: 0px;
+    width: 100%;
+  }
+}
