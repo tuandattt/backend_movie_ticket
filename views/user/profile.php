@@ -36,6 +36,22 @@ $stmt->bind_param("i", $userId);
 $stmt->execute();
 $bookingResult = $stmt->get_result();
 
+// Lấy lịch sử đặt đồ ăn
+$ordersQuery = "
+    SELECT o.order_id, o.order_date, o.total_amount, o.status, 
+           GROUP_CONCAT(CONCAT(oi.quantity, 'x ', s.name) SEPARATOR ', ') AS items
+    FROM orders o
+    JOIN order_items oi ON o.order_id = oi.order_id
+    JOIN snacks s ON oi.item_id = s.snack_id
+    WHERE o.user_id = ? AND oi.item_type = 'snack'
+    GROUP BY o.order_id
+    ORDER BY o.order_date DESC
+";
+$stmt = $conn->prepare($ordersQuery);
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$ordersResult = $stmt->get_result();
+
 // Xử lý các thông báo (success/error)
 $successMessage = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : null;
 $errorMessage = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : null;
@@ -66,6 +82,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 </head>
 <body>
     <h1>Hồ Sơ Cá Nhân</h1>
+    <a href="home.php">Quay lại Trang Chủ</a>
 
     <?php if ($successMessage): ?>
         <p style="color:green;"><?php echo htmlspecialchars($successMessage); ?></p>
@@ -124,6 +141,37 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
             </table>
         <?php else: ?>
             <p>Bạn chưa đặt vé nào.</p>
+        <?php endif; ?>
+    </section>
+
+    <!-- Hiển thị lịch sử đặt đồ ăn -->
+    <section>
+        <h2>Lịch Sử Đặt Đồ Ăn</h2>
+        <?php if ($ordersResult->num_rows > 0): ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Đơn Hàng</th>
+                        <th>Ngày Đặt</th>
+                        <th>Sản Phẩm</th>
+                        <th>Tổng Tiền (VNĐ)</th>
+                        <th>Trạng Thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while ($order = $ordersResult->fetch_assoc()): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                            <td><?php echo htmlspecialchars($order['order_date']); ?></td>
+                            <td><?php echo htmlspecialchars($order['items']); ?></td>
+                            <td><?php echo number_format($order['total_amount'], 0); ?> VNĐ</td>
+                            <td><?php echo htmlspecialchars($order['status']); ?></td>
+                        </tr>
+                    <?php endwhile; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p>Bạn chưa đặt đồ ăn nào.</p>
         <?php endif; ?>
     </section>
 </body>

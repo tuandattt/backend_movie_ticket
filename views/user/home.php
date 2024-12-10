@@ -34,6 +34,7 @@ $featuredResult = $conn->query($featuredQuery);
             <a href="search.php">Tìm kiếm</a>
             <a href="../../logout.php">Đăng xuất</a>
             <a href="profile.php">Hồ Sơ Cá Nhân</a>
+            <a href="purchase_snacks.php">Mua đồ ăn kèm </a>
 
         </nav>
     </header>

@@ -79,7 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("di", $totalAmount, $orderId);
         $stmt->execute();
 
-        $success = "Mua sản phẩm thành công! Tổng số tiền: " . number_format($totalAmount, 2) . " VND.";
+        $success = "Đặt hàng thành công! Tổng số tiền: " . number_format($totalAmount, 0) . " VND.<br>
+        Vui lòng chuyển khoản vào tài khoản: <strong>1900561252</strong> Vietcombank - Nguyễn Văn A.<br>
+        Chúng tôi sẽ xác nhận đơn hàng của bạn trong thời gian sớm nhất.";
     } else {
         $error = "Vui lòng chọn ít nhất một sản phẩm và số lượng hợp lệ.";
     }
@@ -87,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Mua Sản Phẩm Bổ Sung</title>
@@ -122,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <tr>
                         <td><?php echo htmlspecialchars($snack['name']); ?></td>
                         <td><?php echo htmlspecialchars($snack['type']); ?></td>
-                        <td><?php echo number_format($snack['price'], 2); ?> VND</td>
+                        <td><?php echo number_format($snack['price'], 0); ?> VND</td>
                         <td>
                             <input type="hidden" name="snack_id[]" value="<?php echo $snack['snack_id']; ?>">
                             <input type="number" name="quantity[]" min="0" value="0">
