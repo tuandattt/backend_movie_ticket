@@ -17,6 +17,9 @@ function LoginForm() {
   }, []);
 
   useEffect(() => {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
     // Lấy thông tin đăng nhập từ localStorage
     const savedUsername = localStorage.getItem("savedUsername");
     const savedPassword = localStorage.getItem("savedPassword");
@@ -49,7 +52,8 @@ function LoginForm() {
         toast.success("Đăng nhập thành công!");
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("username", data.username);
-        // Điều hướng đến trang chủ sau khi đăng nhập
+
+        // Lưu thông tin đăng nhập vào localStorage nếu người dùng chọn "Nhớ tài khoản"
         if (rememberMe) {
           localStorage.setItem("savedUsername", username);
           localStorage.setItem("savedPassword", password);
@@ -57,9 +61,16 @@ function LoginForm() {
           localStorage.removeItem("savedUsername");
           localStorage.removeItem("savedPassword");
         }
-        setTimeout(() => {
-          navigate("/");
-        }, 2000);
+
+        // Mở dashboard admin trong một cửa sổ mới hoặc tab mới
+        if (data.role === "admin") {
+          // Mở trang dashboard admin trên cổng khác (localhost:8000) trong cửa sổ/tab mới
+          window.location.href = data.redirect_url; // Điều hướng tới URL của admin dashboard
+        } else {
+          setTimeout(() => {
+            navigate("/"); // Điều hướng về trang home nếu không phải admin
+          }, 2000);
+        }
       } else {
         toast.error(data.message || "Đăng nhập không thành công!");
       }

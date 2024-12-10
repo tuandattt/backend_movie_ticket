@@ -2,10 +2,6 @@
 session_start();
 include '../../includes/config.php';
 
-if (!isset($_SESSION['admin'])) {
-    header("Location: ../../views/user/login.php");
-    exit();
-}
 
 $genres_query = "SELECT genre_id, genre_name FROM genres";
 $genres_result = $conn->query($genres_query);

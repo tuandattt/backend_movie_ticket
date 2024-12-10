@@ -2,11 +2,7 @@
 session_start();
 include '../../includes/config.php';
 
-// Kiểm tra nếu người dùng chưa đăng nhập hoặc không phải admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../../views/user/login.php");
-    exit();
-}
+
 
 // Lấy danh sách các thành viên
 $query = "

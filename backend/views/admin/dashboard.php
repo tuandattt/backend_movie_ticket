@@ -1,13 +1,5 @@
 <?php
-session_start();
 
-// Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
-    header("Location: ../user/login.php");
-    exit();
-}
-
-// Kết nối đến cơ sở dữ liệu
 include '../../includes/config.php';
 
 // Lấy dữ liệu tổng quan từ cơ sở dữ liệu
@@ -40,9 +32,10 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
     <div class="dashboard-container">
         <header>
             <h1>Welcome to Admin Dashboard</h1>
-            <p>Xin chào, <?php echo $_SESSION['admin']; ?>!</p>
             <a href="../../controllers/logout.php" class="logout-btn">Đăng xuất</a>
         </header>
+        
+       
 
         <main>
             <section class="overview">
@@ -76,6 +69,8 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
                     <a href="manage_schedules.php" class="manage-btn">Quản lý Lịch chiếu</a>
                     <a href="manage_promotions.php" class="manage-btn">Quản lý Khuyến mãi</a>
                     <a href="reports.php" class="manage-btn">Thống kê & Báo cáo</a>
+                    <a href="admin_bookings.php" class="manage-btn">Quản lý Đặt vé</a>
+
                 </div>
             </section>
         </main>

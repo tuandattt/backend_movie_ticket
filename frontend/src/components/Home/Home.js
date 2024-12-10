@@ -32,10 +32,11 @@ function Home() {
   const handleLogout = () => {
     // Xử lý logout
     localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("token");
     localStorage.removeItem("username");
     setIsLoggedIn(false);
     setUsername("");
-    navigate("/login");
+    window.location.href = "http://localhost:3000/login";
   };
 
   const filteredMovies = movies.filter((movie) => movie.status === currentTab);

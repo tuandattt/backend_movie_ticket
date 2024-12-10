@@ -40,10 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_update->bind_param("i", $user['user_id']);
         $stmt_update->execute();
 
-        echo json_encode([
+        // Gửi kết quả cho client
+        $response = [
             "status" => "success",
-            "username" => $user['username']
-        ]);
+            "username" => $user['username'],
+            "role" => $user['role'],
+            "redirect_url" => ($user['role'] === 'admin') ? 'http://localhost/web-project/backend/views/admin/dashboard.php' : 'http://localhost:3000/'
+        ];
+        echo json_encode($response);
         exit();
     } else {
         echo json_encode(["status" => "error", "message" => "Tên đăng nhập hoặc mật khẩu không đúng!"]);

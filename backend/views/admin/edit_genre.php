@@ -2,11 +2,6 @@
 session_start();
 include '../../includes/config.php';
 
-// Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
-    header("Location: ../../views/user/login.php");
-    exit();
-}
 
 // Lấy thông tin thể loại hiện tại từ cơ sở dữ liệu
 $id = $_GET['id'];
