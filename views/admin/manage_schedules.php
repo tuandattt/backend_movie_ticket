@@ -48,7 +48,7 @@ $schedules = $result->fetch_all(MYSQLI_ASSOC);
         <header>
             <h1>Quản Lý Lịch Chiếu</h1>
             <p>Xin chào, <?php echo $_SESSION['username']; ?>!</p>
-            <a href="/movie_booking/controllers/logout.php" class="logout-btn">Đăng xuất</a>
+            <a href="dashboard.php" class="back-btn">Quay lại Dashboard</a>
         </header>
 
         <main>

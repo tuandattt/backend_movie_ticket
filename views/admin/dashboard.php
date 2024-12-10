@@ -76,6 +76,8 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
                     <a href="manage_schedules.php" class="manage-btn">Quản lý Lịch chiếu</a>
                     <a href="manage_promotions.php" class="manage-btn">Quản lý Khuyến mãi</a>
                     <a href="reports.php" class="manage-btn">Thống kê & Báo cáo</a>
+                    <a href="admin_bookings.php" class="manage-btn">Quản lý Đặt vé</a>
+
                 </div>
             </section>
         </main>

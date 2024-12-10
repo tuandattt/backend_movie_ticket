@@ -33,6 +33,8 @@ $featuredResult = $conn->query($featuredQuery);
             <a href="trending_and_new_movies.php">Phim Mới & Thịnh Hành</a>
             <a href="search.php">Tìm kiếm</a>
             <a href="../../logout.php">Đăng xuất</a>
+            <a href="profile.php">Hồ Sơ Cá Nhân</a>
+
         </nav>
     </header>
 
