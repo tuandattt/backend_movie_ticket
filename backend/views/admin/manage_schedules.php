@@ -19,13 +19,12 @@ $schedules = $result->fetch_all(MYSQLI_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Lịch Chiếu</title>
-    <link rel="stylesheet" href="/movie_booking/assets/css/admin_style.css">
     <script>
         // Function to delete a schedule
         async function deleteSchedule(scheduleId) {
             if (!confirm('Bạn có chắc muốn xóa lịch chiếu này?')) return;
 
-            const response = await fetch('/movie_booking/controllers/schedule_controller.php', {
+            const response = await fetch('/web-project/backend/controllers/schedule_controller.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: `action=delete_schedule&schedule_id=${scheduleId}`
@@ -72,7 +71,7 @@ $schedules = $result->fetch_all(MYSQLI_ASSOC);
                                 <td><?php echo $schedule['seats']; ?></td>
                                 <td><?php echo $schedule['available_seats']; ?></td>
                                 <td>
-                                    <a href="/movie_booking/views/admin/edit_schedule.php?schedule_id=<?php echo $schedule['schedule_id']; ?>">Sửa</a> |
+                                    
                                     <button onclick="deleteSchedule(<?php echo $schedule['schedule_id']; ?>)">Xóa</button>
                                 </td>
                             </tr>
@@ -84,7 +83,7 @@ $schedules = $result->fetch_all(MYSQLI_ASSOC);
             <!-- Form to add a new schedule -->
             <section>
                 <h2>Thêm Lịch Chiếu Mới</h2>
-                <form action="/movie_booking/controllers/schedule_controller.php" method="POST">
+                <form action="/web-project/backend/controllers/schedule_controller.php" method="POST">
                     <input type="hidden" name="action" value="add_schedule">
                     <label for="movie_id">Phim:</label>
                     <select name="movie_id" required>

@@ -1,13 +1,6 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/movie_booking/includes/config.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/web-project/backend/includes/config.php';
 session_start();
-
-// Check if the user is an admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    http_response_code(403);
-    echo json_encode(["message" => "Không có quyền truy cập."]);
-    exit();
-}
 
 // Handle GET requests for listing schedules
 if (isset($_GET['action']) && $_GET['action'] === 'list_schedules') {
