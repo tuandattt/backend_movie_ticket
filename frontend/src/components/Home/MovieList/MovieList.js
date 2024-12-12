@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./MovieList.css";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from "react-router-dom";
 
 const MovieList = ({ movies, currentTab }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -9,6 +10,8 @@ const MovieList = ({ movies, currentTab }) => {
   const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
   const [selectedDate, setSelectedDate] = useState(null); // Ngày được chọn
   const [theaterName, setTheaterName] = useState(""); // Nếu cần hiển thị tên rạp
+
+  const navigate = useNavigate();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -138,7 +141,13 @@ const MovieList = ({ movies, currentTab }) => {
 
             <div className="showtimes-container">
               {filteredSchedules.map((sch) => (
-                <div key={sch.schedule_id} className="showtime-item">
+                <div
+                  key={sch.schedule_id}
+                  className="showtime-item"
+                  onClick={() =>
+                    navigate(`/booking?schedule_id=${sch.schedule_id}`)
+                  }
+                >
                   <div className="showtime">{formatTime(sch.show_time)}</div>
                   <div className="available-seats">
                     {sch.available_seats} ghế trống

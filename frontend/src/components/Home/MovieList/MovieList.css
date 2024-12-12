@@ -82,8 +82,11 @@
 .movie-item h3 {
   font-size: 18px;
   font-weight: bold;
-  color: #333; /* Màu tiêu đề */
+  color: #333;
   margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .movie-item p {
@@ -209,8 +212,8 @@
 }
 
 .date-tab.active {
-  color: #007bff;
-  border-bottom: 3px solid #007bff;
+  color: #70d2ed;
+  border-bottom: 3px solid #70d2ed;
 }
 
 .format-type {

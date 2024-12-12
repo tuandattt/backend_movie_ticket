@@ -6,26 +6,31 @@ import LoginForm from "./components/Auth/LoginForm";
 import SignUpForm from "./components/Auth/SignUpForm";
 import ForgotPasswordForm from "./components/Auth/ForgotPasswordForm";
 import NewPasswordForm from "./components/Auth/NewPasswordForm";
+import BookingPage from "./components/BookingPage/BookingPage";
+import AuthProvider from "./context/AuthContext";
 import "./App.css";
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<LoginForm />} />
-        <Route path="/signup" element={<SignUpForm />} />
-        <Route path="/forgot-password" element={<ForgotPasswordForm />} />
-        <Route path="/new-password" element={<NewPasswordForm />} />
-      </Routes>
-      <Toaster
-        richColors
-        position="top-left"
-        toastOptions={{
-          duration: 2000, // Mặc định 2 giây cho tất cả các toast
-        }}
-      />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignUpForm />} />
+          <Route path="/forgot-password" element={<ForgotPasswordForm />} />
+          <Route path="/new-password" element={<NewPasswordForm />} />
+          <Route path="/booking" element={<BookingPage />} />
+        </Routes>
+        <Toaster
+          richColors
+          position="top-left"
+          toastOptions={{
+            duration: 2000, // Mặc định 2 giây cho tất cả các toast
+          }}
+        />
+      </div>
+    </AuthProvider>
   );
 }
 
