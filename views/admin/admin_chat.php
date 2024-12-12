@@ -76,7 +76,7 @@ $result = $conn->query($userQuery);
 </head>
 <body>
     <h1>Admin Chat</h1>
-    <a href="/movie_booking/views/admin/home.php">Quay lại Trang Chủ Admin</a>
+    <a href="/movie_booking/views/admin/dashboard.php">Quay lại Trang Chủ Admin</a>
 
     <!-- Danh sách người dùng -->
     <div id="user-list">

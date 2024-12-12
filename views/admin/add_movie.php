@@ -1,44 +1,49 @@
 <?php
 session_start();
-include '../../includes/config.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/movie_booking/includes/config.php';
 
-// Kiểm tra nếu Admin chưa đăng nhập, chuyển hướng về trang đăng nhập
-if (!isset($_SESSION['admin'])) {
-    header("Location: ../../views/user/login.php");
+// Kiểm tra nếu admin chưa đăng nhập
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+    header("Location: /movie_booking/views/user/login.php");
     exit();
 }
 
-// Lấy danh sách thể loại từ cơ sở dữ liệu để chọn trong form
+// Lấy danh sách thể loại từ cơ sở dữ liệu
 $genres_query = "SELECT genre_id, genre_name FROM genres";
 $genres_result = $conn->query($genres_query);
 
 if (isset($_POST['add_movie'])) {
-    $title = $_POST['title'];
-    $genre_ids = $_POST['genres']; // Lấy mảng thể loại từ form
-    $duration = $_POST['duration'];
-    $description = $_POST['description'];
-    $director = $_POST['director'];
-    $actors = $_POST['actors'];
-    $trailer_link = $_POST['trailer_link'];
+    $title = trim($_POST['title']);
+    $genre_ids = $_POST['genres']; // Lấy thể loại từ form
+    $duration = (int)$_POST['duration'];
+    $description = trim($_POST['description']);
+    $director = trim($_POST['director']);
+    $actors = trim($_POST['actors']);
+    $trailer_link = trim($_POST['trailer_link']);
     $release_date = $_POST['release_date'];
     $status = $_POST['status'];
-    $rating = $_POST['rating'];
+    $rating = (float)$_POST['rating'];
 
     // Xử lý tải lên hình ảnh
     $poster = $_FILES['poster']['name'];
-    $target_dir = "../../assets/images/";
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . '/movie_booking/assets/images/';
     $target_file = $target_dir . basename($poster);
+
+    if (!is_dir($target_dir)) {
+        mkdir($target_dir, 0777, true); // Tạo thư mục nếu chưa tồn tại
+    }
 
     if (move_uploaded_file($_FILES['poster']['tmp_name'], $target_file)) {
         // Thêm phim mới vào bảng `movies`
-        $query = "INSERT INTO movies (title, duration, description, director, actors, trailer_link, release_date, status, rating, poster) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO movies (title, duration, description, director, actors, trailer_link, release_date, status, rating, poster) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($query);
         $stmt->bind_param("sisssssdss", $title, $duration, $description, $director, $actors, $trailer_link, $release_date, $status, $rating, $poster);
 
         if ($stmt->execute()) {
             $movie_id = $stmt->insert_id;
 
-            // Thêm các thể loại vào bảng `movie_genres`
+            // Thêm thể loại vào bảng `movie_genres`
             foreach ($genre_ids as $genre_id) {
                 $genre_query = "INSERT INTO movie_genres (movie_id, genre_id) VALUES (?, ?)";
                 $genre_stmt = $conn->prepare($genre_query);
@@ -46,13 +51,14 @@ if (isset($_POST['add_movie'])) {
                 $genre_stmt->execute();
             }
 
-            header("Location: manage_movies.php");
+            // Redirect sau khi thành công
+            header("Location: /movie_booking/views/admin/manage_movies.php");
             exit();
         } else {
-            echo "Đã xảy ra lỗi khi thêm phim: " . $stmt->error;
+            echo "Lỗi khi thêm phim: " . $stmt->error;
         }
     } else {
-        echo "Đã xảy ra lỗi khi tải lên hình ảnh.";
+        echo "Lỗi khi tải lên hình ảnh.";
     }
 }
 ?>
@@ -95,13 +101,13 @@ if (isset($_POST['add_movie'])) {
             <label for="release_date">Ngày phát hành:</label>
             <input type="date" name="release_date" required>
             <br>
-            <label for="status">Trạng thái:</label>
-            <select name="status" required>
-                <option value='coming_soon'>Coming Soon</option>
-                <option value="now_showing">Now Showing</option>
-                <option value="stopped">Stopped</option>
-            </select>
-            <br>
+                <label for="status">Trạng thái:</label>
+                <select name="status" required>
+                    <option value='coming_soon'>Coming Soon</option>
+                    <option value="now_showing">Now Showing</option>
+                    <option value="stopped">Stopped</option>
+                </select>
+                <br>
             <label for="rating">Rating:</label>
             <input type="number" step="0.1" min="0" max="10" name="rating" required>
             <br>
