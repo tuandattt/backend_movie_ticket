@@ -96,12 +96,20 @@ $commentsResult = $stmt->get_result();
     <p><strong>Mô Tả:</strong> <?php echo htmlspecialchars($movie['description']); ?></p>
 
     <h2>Trailer</h2>
-    <?php if (!empty($movie['trailer_link'])): ?>
-        <iframe width="560" height="315" src="<?php echo htmlspecialchars($movie['trailer_link']); ?>" frameborder="0" allowfullscreen></iframe>
-    <?php else: ?>
-        <p>Không có trailer.</p>
-    <?php endif; ?>
-
+<?php if (!empty($movie['trailer_link'])): ?>
+    <?php
+    // Xử lý liên kết YouTube để đảm bảo nó đúng định dạng
+    $trailerLink = htmlspecialchars($movie['trailer_link']);
+    if (strpos($trailerLink, 'youtube.com/watch') !== false) {
+        $trailerEmbedLink = str_replace("watch?v=", "embed/", $trailerLink);
+    ?>
+        <iframe width="560" height="315" src="<?php echo $trailerEmbedLink; ?>" frameborder="0" allowfullscreen></iframe>
+    <?php } else { ?>
+        <p>Liên kết trailer không hợp lệ.</p>
+    <?php } ?>
+<?php else: ?>
+    <p>Không có trailer.</p>
+<?php endif; ?>
     <h2>Lịch Chiếu</h2>
     <?php if ($schedules->num_rows > 0): ?>
         <?php while ($schedule = $schedules->fetch_assoc()): ?>

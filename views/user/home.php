@@ -32,9 +32,10 @@ $featuredResult = $conn->query($featuredQuery);
         <nav>
             <a href="trending_and_new_movies.php">Phim Mới & Thịnh Hành</a>
             <a href="search.php">Tìm kiếm</a>
-            <a href="../../logout.php">Đăng xuất</a>
+            <a href="chat.php">tro chuyen voi admin</a>
             <a href="profile.php">Hồ Sơ Cá Nhân</a>
             <a href="purchase_snacks.php">Mua đồ ăn kèm </a>
+            <a href="../../logout.php">Đăng xuất</a>
 
         </nav>
     </header>

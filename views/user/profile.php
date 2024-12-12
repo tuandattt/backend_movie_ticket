@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $userId = $_SESSION['user_id'];
 
 $userQuery = "
-    SELECT username, name, age, email, avatar, role, membership_level, is_u23_confirmed
+    SELECT username, name, age, email, avatar, role, membership_level, is_u23_confirmed, total_spent
     FROM users 
     WHERE user_id = ?
 ";
@@ -85,20 +85,27 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
     <a href="home.php">Quay lại Trang Chủ</a>
 
     <?php if ($successMessage): ?>
-        <p style="color:green;"><?php echo htmlspecialchars($successMessage); ?></p>
+        <p style="color:green;">
+            <?php echo htmlspecialchars($successMessage); ?>
+        </p>
     <?php endif; ?>
     <?php if ($errorMessage): ?>
-        <p style="color:red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+        <p style="color:red;">
+            <?php echo htmlspecialchars($errorMessage); ?>
+        </p>
     <?php endif; ?>
 
     <!-- Hiển thị thông tin cá nhân -->
     <section>
         <h2>Thông Tin Cá Nhân</h2>
-        <?php if (!empty($user['avatar'])): ?>
-            <img src="../../assets/avatars/<?php echo htmlspecialchars($user['avatar']); ?>" alt="Avatar" width="100">
-        <?php else: ?>
-            <p>Chưa có ảnh đại diện.</p>
-        <?php endif; ?>
+        <div>
+            <strong>Ảnh Đại Diện:</strong><br>
+            <?php if (!empty($user['avatar']) && file_exists("../../assets/avatars/" . $user['avatar'])): ?>
+                <img src="../../assets/avatars/<?php echo htmlspecialchars($user['avatar']); ?>" alt="Avatar" width="150">
+            <?php else: ?>
+                <img src="../../assets/avatars/default-avatar.png" alt="Default Avatar" width="150">
+            <?php endif; ?>
+        </div>
         <p><strong>Tên đăng nhập:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
         <p><strong>Họ và tên:</strong> <?php echo htmlspecialchars($user['name'] ?? 'Chưa cập nhật'); ?></p>
         <p><strong>Tuổi:</strong> <?php echo htmlspecialchars($user['age'] ?? 'Chưa cập nhật'); ?></p>
@@ -106,6 +113,7 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
         <p><strong>Vai trò:</strong> <?php echo htmlspecialchars($user['role']); ?></p>
         <p><strong>Cấp bậc thành viên:</strong> <?php echo htmlspecialchars($user['membership_level']); ?></p>
         <p><strong>Trạng thái U23:</strong> <?php echo $user['is_u23_confirmed'] === 'yes' ? 'Đã xác nhận' : 'Chưa xác nhận'; ?></p>
+        <p><strong>Tổng tiền đã tiêu:</strong> <?php echo number_format($user['total_spent'], 0); ?> VNĐ</p>
         <a href="edit_profile.php">Chỉnh sửa thông tin</a>
     </section>
 

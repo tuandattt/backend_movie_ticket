@@ -99,36 +99,30 @@ if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
 
     <form action="" method="POST" enctype="multipart/form-data">
         <label for="username">Tên đăng nhập:</label><br>
-        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username']); ?>" required><br>
+        <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($user['username'] ?? ''); ?>" required><br>
 
         <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email']); ?>" required><br>
+        <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user['email'] ?? ''); ?>" required><br>
 
         <label for="name">Họ và tên:</label><br>
-        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name']); ?>"><br>
+        <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user['name'] ?? ''); ?>"><br>
 
         <label for="age">Tuổi:</label><br>
-        <input type="number" id="age" name="age" value="<?php echo htmlspecialchars($user['age']); ?>"><br>
+        <input type="number" id="age" name="age" value="<?php echo htmlspecialchars($user['age'] ?? ''); ?>"><br>
 
         <label for="avatar">Ảnh đại diện:</label><br>
-        <?php if (!empty($user['avatar'])): ?>
+        <?php if (!empty($user['avatar']) && file_exists("../../assets/avatars/" . $user['avatar'])): ?>
             <img src="../../assets/avatars/<?php echo htmlspecialchars($user['avatar']); ?>" alt="Avatar" width="100"><br>
         <?php endif; ?>
         <input type="file" id="avatar" name="avatar"><br>
 
+        <!-- Cấp bậc thành viên chỉ hiển thị thông tin, không cho chỉnh sửa -->
         <label for="membership_level">Cấp bậc thành viên:</label><br>
-        <select id="membership_level" name="membership_level">
-            <option value="bronze" <?php echo $user['membership_level'] === 'bronze' ? 'selected' : ''; ?>>Bronze</option>
-            <option value="silver" <?php echo $user['membership_level'] === 'silver' ? 'selected' : ''; ?>>Silver</option>
-            <option value="gold" <?php echo $user['membership_level'] === 'gold' ? 'selected' : ''; ?>>Gold</option>
-            <option value="platinum" <?php echo $user['membership_level'] === 'platinum' ? 'selected' : ''; ?>>Platinum</option>
-        </select><br>
+        <p><strong><?php echo ucfirst(htmlspecialchars($user['membership_level'] ?? 'Không xác định')); ?></strong></p>
 
+        <!-- Trạng thái U23 chỉ hiển thị thông tin, không cho chỉnh sửa -->
         <label for="is_u23_confirmed">Trạng thái U23:</label><br>
-        <select id="is_u23_confirmed" name="is_u23_confirmed">
-            <option value="yes" <?php echo $user['is_u23_confirmed'] === 'yes' ? 'selected' : ''; ?>>Đã xác nhận</option>
-            <option value="no" <?php echo $user['is_u23_confirmed'] === 'no' ? 'selected' : ''; ?>>Chưa xác nhận</option>
-        </select><br>
+        <p><strong><?php echo ($user['is_u23_confirmed'] ?? 'no') === 'yes' ? 'Đã xác nhận' : 'Chưa xác nhận'; ?></strong></p>
 
         <button type="submit">Cập nhật</button>
     </form>
