@@ -16,19 +16,19 @@ const Header = () => {
   return (
     <>
       <div className="top-heading">
-        {!isLoggedIn ? (
-          <>
-            <a href="/login">Đăng nhập</a>
-            <span className="divider">|</span>
-            <a href="/signup">Đăng ký</a>
-          </>
-        ) : (
+        {isLoggedIn ? (
           <div className="user-info">
             <span>Xin chào: {username}</span>
             <button className="logout-button" onClick={handleLogout}>
               <FontAwesomeIcon icon={faRightFromBracket} />
             </button>
           </div>
+        ) : (
+          <>
+            <a href="/login">Đăng nhập</a>
+            <span className="divider">|</span>
+            <a href="/signup">Đăng ký</a>
+          </>
         )}
       </div>
       <header className="header-container">

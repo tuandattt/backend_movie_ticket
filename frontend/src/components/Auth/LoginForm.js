@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { AuthContext } from "../../context/AuthContext"; // Import AuthContext
 import "./Auth.css";
 
 function LoginForm() {
   const navigate = useNavigate();
+  const { handleLogin } = useContext(AuthContext); // Sử dụng context để quản lý trạng thái đăng nhập
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -17,9 +20,6 @@ function LoginForm() {
   }, []);
 
   useEffect(() => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
     // Lấy thông tin đăng nhập từ localStorage
     const savedUsername = localStorage.getItem("savedUsername");
     const savedPassword = localStorage.getItem("savedPassword");
@@ -50,8 +50,9 @@ function LoginForm() {
 
       if (data.status === "success") {
         toast.success("Đăng nhập thành công!");
-        localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("username", data.username);
+
+        // Cập nhật trạng thái đăng nhập thông qua AuthContext
+        handleLogin(data.username);
 
         // Lưu thông tin đăng nhập vào localStorage nếu người dùng chọn "Nhớ tài khoản"
         if (rememberMe) {
@@ -62,10 +63,10 @@ function LoginForm() {
           localStorage.removeItem("savedPassword");
         }
 
-        // Mở dashboard admin trong một cửa sổ mới hoặc tab mới
+        // Điều hướng người dùng
         if (data.role === "admin") {
-          // Mở trang dashboard admin trên cổng khác (localhost:8000) trong cửa sổ/tab mới
-          window.location.href = data.redirect_url; // Điều hướng tới URL của admin dashboard
+          // Mở trang dashboard admin trong một cửa sổ mới hoặc tab mới
+          window.location.href = data.redirect_url;
         } else {
           setTimeout(() => {
             navigate("/"); // Điều hướng về trang home nếu không phải admin

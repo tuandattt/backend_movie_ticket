@@ -16,6 +16,14 @@ const AuthProvider = ({ children }) => {
     setUsername(storedUsername || "");
   }, []);
 
+  // Hàm xử lý đăng nhập
+  const handleLogin = (username) => {
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("username", username);
+    setIsLoggedIn(true);
+    setUsername(username);
+  };
+
   // Hàm xử lý đăng xuất
   const handleLogout = () => {
     localStorage.removeItem("isLoggedIn");
@@ -28,7 +36,14 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, username, setIsLoggedIn, setUsername, handleLogout }}
+      value={{
+        isLoggedIn,
+        username,
+        setIsLoggedIn,
+        setUsername,
+        handleLogin,
+        handleLogout,
+      }}
     >
       {children}
     </AuthContext.Provider>
