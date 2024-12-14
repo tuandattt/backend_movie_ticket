@@ -177,3 +177,151 @@ $result = $conn->query($userQuery);
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-top: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        #user-list {
+            width: 30%;
+            background-color: #e9f5ff;
+            border-right: 2px solid #007bff;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        #user-list h3 {
+            text-align: center;
+            color: #007bff;
+            padding: 10px 0;
+            margin: 0;
+            background-color: #f0f8ff;
+            border-bottom: 1px solid #007bff;
+        }
+
+        .user-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .user-item:hover {
+            background-color: #cce5ff;
+            color: #007bff;
+        }
+
+        #chat-container {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #chat-box {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 500px;
+            border-bottom: 2px solid #007bff;
+            background-color: #ffffff;
+        }
+
+        #chat-box .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+
+        .message.admin {
+            align-self: flex-end;
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .message.user {
+            align-self: flex-start;
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        #message-input-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f0f8ff;
+        }
+
+        #message-input {
+            flex-grow: 1;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        #send-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+
+        a.back-link {
+            display: inline-block;
+            margin: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.back-link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+</html>

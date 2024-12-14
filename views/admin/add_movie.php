@@ -67,7 +67,81 @@ if (isset($_POST['add_movie'])) {
 <head>
     <meta charset="UTF-8">
     <title>Thêm Phim Mới</title>
-    <link rel="stylesheet" href="../../assets/css/admin_style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #007BFF;
+        }
+
+        input, textarea, select {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-align: center;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .back-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -75,47 +149,48 @@ if (isset($_POST['add_movie'])) {
         <form action="" method="POST" enctype="multipart/form-data">
             <label for="title">Tên phim:</label>
             <input type="text" name="title" required>
-            <br>
+            
             <label for="genres">Thể loại:</label>
             <select name="genres[]" multiple required>
                 <?php while ($row = $genres_result->fetch_assoc()): ?>
                     <option value="<?php echo $row['genre_id']; ?>"><?php echo htmlspecialchars($row['genre_name']); ?></option>
                 <?php endwhile; ?>
             </select>
-            <br>
+            
             <label for="duration">Thời lượng (phút):</label>
             <input type="number" name="duration" required>
-            <br>
+            
             <label for="description">Mô tả:</label>
             <textarea name="description" required></textarea>
-            <br>
+            
             <label for="director">Đạo diễn:</label>
             <input type="text" name="director" required>
-            <br>
+            
             <label for="actors">Diễn viên:</label>
             <input type="text" name="actors" required>
-            <br>
+            
             <label for="trailer_link">Trailer (URL):</label>
             <input type="url" name="trailer_link" required>
-            <br>
+            
             <label for="release_date">Ngày phát hành:</label>
             <input type="date" name="release_date" required>
-            <br>
-                <label for="status">Trạng thái:</label>
-                <select name="status" required>
-                    <option value='coming_soon'>Coming Soon</option>
-                    <option value="now_showing">Now Showing</option>
-                    <option value="stopped">Stopped</option>
-                </select>
-                <br>
+            
+            <label for="status">Trạng thái:</label>
+            <select name="status" required>
+                <option value='coming_soon'>Coming Soon</option>
+                <option value="now_showing">Now Showing</option>
+                <option value="stopped">Stopped</option>
+            </select>
+            
             <label for="rating">Rating:</label>
             <input type="number" step="0.1" min="0" max="10" name="rating" required>
-            <br>
+            
             <label for="poster">Poster:</label>
             <input type="file" name="poster" accept="image/*" required>
-            <br>
+            
             <button type="submit" name="add_movie">Thêm phim</button>
         </form>
+        <a href="/movie_booking/views/admin/manage_movies.php" class="back-btn">Quay lại Quản lý Phim</a>
     </div>
 </body>
 </html>

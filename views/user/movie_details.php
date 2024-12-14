@@ -53,12 +53,12 @@ $stmt = $conn->prepare($reviewsQuery);
 $stmt->bind_param("i", $movie_id);
 $stmt->execute();
 $reviewsResult = $stmt->get_result();
-
 // Tính đánh giá trung bình
+
 $averageRatingQuery = "
-    SELECT COUNT(rating) AS total_ratings, AVG(rating) AS average_rating
-    FROM reviews
-    WHERE movie_id = ?
+    SELECT COUNT(r.rating) AS total_ratings, COALESCE(SUM(r.rating) / COUNT(r.rating), 0) AS average_rating
+    FROM reviews r
+    WHERE r.movie_id = ?
 ";
 $stmt = $conn->prepare($averageRatingQuery);
 $stmt->bind_param("i", $movie_id);
@@ -125,7 +125,8 @@ $commentsResult = $stmt->get_result();
     <?php endif; ?>
 
     <h2>Đánh Giá</h2>
-    <p><strong>Đánh giá trung bình:</strong> <?php echo number_format($averageRating, 1); ?>/5 từ <?php echo $totalRatings; ?> lượt đánh giá.</p>
+<p><strong>Đánh giá trung bình:</strong> <?php echo number_format($averageRating, 1); ?>/5 từ <?php echo $totalRatings; ?> lượt đánh giá.</p>
+
     <?php if ($reviewsResult->num_rows > 0): ?>
         <?php while ($review = $reviewsResult->fetch_assoc()): ?>
             <p>

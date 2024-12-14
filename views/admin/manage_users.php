@@ -90,34 +90,35 @@ $users_result = $conn->query($users_query);
             </tr>
         </thead>
         <tbody>
-            <?php while ($user = $users_result->fetch_assoc()): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($user['user_id']); ?></td>
-                    <td><?php echo htmlspecialchars($user['username']); ?></td>
-                    <td><?php echo htmlspecialchars($user['name'] ?? 'Chưa cập nhật'); ?></td>
-                    <td><?php echo htmlspecialchars($user['age'] ?? 'N/A'); ?></td>
-                    <td><?php echo htmlspecialchars($user['email']); ?></td>
-                    <td><?php echo htmlspecialchars($user['role']); ?></td>
-                    <td><?php echo htmlspecialchars($user['membership_level']); ?></td>
-                    <td><?php echo $user['is_u23_confirmed'] === 'yes' ? 'Đã xác nhận' : 'Chưa xác nhận'; ?></td>
-                    <td><?php echo htmlspecialchars($user['created_at']); ?></td>
-                    <td><?php echo number_format($user['total_spent'], 0); ?> VNĐ</td>
-                    <td>
-                        <form method="POST" action="" style="display: inline;">
-                            <input type="hidden" name="action" value="update">
-                            <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
-                            <button type="button" onclick="showEditForm(<?php echo $user['user_id']; ?>)">Chỉnh sửa</button>
-                        </form>
-                        <form method="POST" action="" style="display: inline;">
-                            <input type="hidden" name="action" value="delete">
-                            <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
-                            <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?');">Xóa</button>
-                        </form>
-                    </td>
-                </tr>
-            <?php endwhile; ?>
-        </tbody>
-    </table>
+    <?php while ($user = $users_result->fetch_assoc()): ?>
+        <tr data-user-id="<?php echo $user['user_id']; ?>">
+            <td><?php echo htmlspecialchars($user['user_id']); ?></td>
+            <td class="username"><?php echo htmlspecialchars($user['username']); ?></td>
+            <td class="name"><?php echo htmlspecialchars($user['name'] ?? 'Chưa cập nhật'); ?></td>
+            <td class="age"><?php echo htmlspecialchars($user['age'] ?? 'N/A'); ?></td>
+            <td class="email"><?php echo htmlspecialchars($user['email']); ?></td>
+            <td class="role"><?php echo htmlspecialchars($user['role']); ?></td>
+            <td class="membership-level"><?php echo htmlspecialchars($user['membership_level']); ?></td>
+            <td class="is-u23-confirmed">
+                <?php echo $user['is_u23_confirmed'] === 'yes' ? 'Đã xác nhận' : 'Chưa xác nhận'; ?>
+            </td>
+            <td><?php echo htmlspecialchars($user['created_at']); ?></td>
+            <td><?php echo number_format($user['total_spent'], 0); ?> VNĐ</td>
+            <td>
+                <form method="POST" action="" style="display: inline;">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
+                    <button type="button" onclick="showEditForm(<?php echo $user['user_id']; ?>)">Chỉnh sửa</button>
+                </form>
+                <form method="POST" action="" style="display: inline;">
+                    <input type="hidden" name="action" value="delete">
+                    <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
+                    <button type="submit" onclick="return confirm('Bạn có chắc chắn muốn xóa người dùng này?');">Xóa</button>
+                </form>
+            </td>
+        </tr>
+    <?php endwhile; ?>
+</tbody>
 
     <!-- Form chỉnh sửa người dùng -->
     <div id="editForm" style="display: none; border: 1px solid #ccc; padding: 20px; margin-top: 20px;">
@@ -157,21 +158,195 @@ $users_result = $conn->query($users_query);
 
     <script>
         function showEditForm(userId) {
-            const row = document.querySelector(`tr td:first-child:contains("${userId}")`).parentElement;
-            document.getElementById('edit_user_id').value = userId;
-            document.getElementById('edit_username').value = row.children[1].textContent.trim();
-            document.getElementById('edit_name').value = row.children[2].textContent.trim();
-            document.getElementById('edit_age').value = row.children[3].textContent.trim();
-            document.getElementById('edit_email').value = row.children[4].textContent.trim();
-            document.getElementById('edit_role').value = row.children[5].textContent.trim();
-            document.getElementById('edit_membership_level').value = row.children[6].textContent.trim();
-            document.getElementById('edit_is_u23_confirmed').value = row.children[7].textContent.trim() === 'Đã xác nhận' ? 'yes' : 'no';
-            document.getElementById('editForm').style.display = 'block';
-        }
+    // Find the row dynamically using data-user-id
+    const row = document.querySelector(`tr[data-user-id="${userId}"]`);
+    if (!row) {
+        alert("Không tìm thấy thông tin người dùng!");
+        return;
+    }
 
-        function hideEditForm() {
-            document.getElementById('editForm').style.display = 'none';
-        }
+    // Populate the form fields with the user's data
+    document.getElementById("edit_user_id").value = userId;
+    document.getElementById("edit_username").value = row.querySelector(".username").textContent.trim();
+    document.getElementById("edit_name").value = row.querySelector(".name").textContent.trim();
+    document.getElementById("edit_age").value = row.querySelector(".age").textContent.trim();
+    document.getElementById("edit_email").value = row.querySelector(".email").textContent.trim();
+    document.getElementById("edit_role").value = row.querySelector(".role").textContent.trim();
+    document.getElementById("edit_membership_level").value = row.querySelector(".membership-level").textContent.trim();
+    document.getElementById("edit_is_u23_confirmed").value =
+        row.querySelector(".is-u23-confirmed").textContent.trim() === "Đã xác nhận" ? "yes" : "no";
+
+    // Show the edit form
+    document.getElementById("editForm").style.display = "block";
+}
+
+function hideEditForm() {
+    // Hide the edit form
+    document.getElementById("editForm").style.display = "none";
+}
     </script>
 </body>
+</html>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Người dùng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #007BFF;
+            margin-top: 20px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        a.back-btn {
+            display: inline-block;
+            text-decoration: none;
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        a.back-btn:hover {
+            background-color: #5a6268;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table tr:hover {
+            background-color: #e9f4ff;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            margin: 2px;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .edit-btn {
+            background-color: #007BFF;
+        }
+
+        .edit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .edit-form {
+            display: none;
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"], input[type="email"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-btn {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel-btn {
+            padding: 10px 20px;
+            background-color: #6c757d;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancel-btn:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+
 </html>
