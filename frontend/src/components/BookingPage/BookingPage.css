@@ -127,10 +127,13 @@
   border-radius: 4px;
   cursor: pointer;
   width: 100%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .continue-button:hover {
-  background: #0056b3;
+  transform: scale(1.05);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .seat.double {

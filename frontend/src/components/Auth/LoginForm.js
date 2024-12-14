@@ -42,6 +42,7 @@ function LoginForm() {
           headers: {
             "Content-Type": "application/x-www-form-urlencoded",
           },
+          credentials: "include", // Gửi cookie phiên đến server
           body: new URLSearchParams({ username, password }),
         }
       );
@@ -62,6 +63,10 @@ function LoginForm() {
           localStorage.removeItem("savedUsername");
           localStorage.removeItem("savedPassword");
         }
+
+        // Lưu trạng thái đăng nhập
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("username", data.username);
 
         // Điều hướng người dùng
         if (data.role === "admin") {

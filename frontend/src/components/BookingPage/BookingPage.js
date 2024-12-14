@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./BookingPage.css";
 import Header from "../Home/Header/Header";
 import Footer from "../Home/Footer/Footer";
@@ -11,6 +11,19 @@ const BookingPage = () => {
 
   const [scheduleInfo, setScheduleInfo] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
+
+  const navigate = useNavigate();
+
+  const handleContinue = () => {
+    if (selectedSeats.length === 0) {
+      alert("Vui lòng chọn ghế trước khi tiếp tục!");
+      return;
+    }
+
+    navigate("/payment", {
+      state: { scheduleInfo, selectedSeats, totalPrice },
+    });
+  };
 
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":"); // Lấy giờ và phút
@@ -351,7 +364,9 @@ const BookingPage = () => {
                   <strong>Tổng tiền:</strong> {totalPrice.toLocaleString()} VND
                 </p>
               </div>
-              <button className="continue-button">Tiếp tục</button>
+              <button className="continue-button" onClick={handleContinue}>
+                Tiếp tục
+              </button>
             </div>
           </div>
         </div>

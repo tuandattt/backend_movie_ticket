@@ -7,6 +7,7 @@ import SignUpForm from "./components/Auth/SignUpForm";
 import ForgotPasswordForm from "./components/Auth/ForgotPasswordForm";
 import NewPasswordForm from "./components/Auth/NewPasswordForm";
 import BookingPage from "./components/BookingPage/BookingPage";
+import Payment from "./components/Payment/Payment";
 import AuthProvider from "./context/AuthContext";
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordForm />} />
           <Route path="/new-password" element={<NewPasswordForm />} />
           <Route path="/booking" element={<BookingPage />} />
+          <Route path="/payment" element={<Payment />} />
         </Routes>
         <Toaster
           richColors

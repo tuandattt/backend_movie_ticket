@@ -2,9 +2,10 @@
 session_start();
 include_once '../../includes/config.php';
 
-header("Access-Control-Allow-Origin: http://localhost:3000");
-header("Access-Control-Allow-Methods: POST, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Origin: http://localhost:3000"); // Địa chỉ frontend
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header("Access-Control-Allow-Credentials: true"); // Cho phép gửi cookie
 header("Content-Type: application/json");
 
 // Xử lý form đăng nhập
