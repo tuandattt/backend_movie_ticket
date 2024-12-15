@@ -183,33 +183,60 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 
     <!-- Hiển thị lịch sử đặt đồ ăn -->
     <section>
-        <h2>Lịch Sử Đặt Đồ Ăn</h2>
-        <?php if ($ordersResult->num_rows > 0): ?>
-            <table>
-                <thead>
+    <h2>Lịch Sử Đặt Đồ Ăn</h2>
+    <?php if ($ordersResult->num_rows > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Đơn Hàng</th>
+                    <th>Ngày Đặt</th>
+                    <th>Sản Phẩm</th>
+                    <th>Tổng Tiền (VNĐ)</th>
+                    <th>Trạng Thái</th>
+                    <th>Mã QR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($order = $ordersResult->fetch_assoc()): ?>
                     <tr>
-                        <th>ID Đơn Hàng</th>
-                        <th>Ngày Đặt</th>
-                        <th>Sản Phẩm</th>
-                        <th>Tổng Tiền (VNĐ)</th>
-                        <th>Trạng Thái</th>
+                        <td><?php echo htmlspecialchars($order['order_id']); ?></td>
+                        <td><?php echo htmlspecialchars($order['order_date']); ?></td>
+                        <td><?php echo htmlspecialchars($order['items']); ?></td>
+                        <td><?php echo number_format($order['total_amount'], 0); ?> VNĐ</td>
+                        <td><?php echo htmlspecialchars($order['status']); ?></td>
+                        <td>
+                            <?php
+                            // Tạo mã QR cho đơn đặt đồ ăn
+                            $qrContent = sprintf(
+                                "Ngày Đặt: %s\nSản Phẩm: %s",
+                                $order['order_date'],
+                                $order['items']
+                            );
+
+                            $qrDir = $_SERVER['DOCUMENT_ROOT'] . '/movie_booking/assets/qrcodes/';
+                            $qrUrl = '/movie_booking/assets/qrcodes/';
+                            if (!is_dir($qrDir)) {
+                                mkdir($qrDir, 0777, true);
+                            }
+
+                            $qrFile = $qrDir . "order_" . $order['order_id'] . ".png";
+
+                            // Kiểm tra và tạo file QR Code nếu chưa tồn tại
+                            if (!file_exists($qrFile)) {
+                                include_once '../../includes/phpqrcode/qrlib.php';
+                                QRcode::png($qrContent, $qrFile, QR_ECLEVEL_L, 4);
+                            }
+                            ?>
+                            <img src="<?php echo $qrUrl . "order_" . $order['order_id'] . ".png"; ?>" alt="QR Code" width="100">
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php while ($order = $ordersResult->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($order['order_id']); ?></td>
-                            <td><?php echo htmlspecialchars($order['order_date']); ?></td>
-                            <td><?php echo htmlspecialchars($order['items']); ?></td>
-                            <td><?php echo number_format($order['total_amount'], 0); ?> VNĐ</td>
-                            <td><?php echo htmlspecialchars($order['status']); ?></td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>Bạn chưa đặt đồ ăn nào.</p>
-        <?php endif; ?>
-    </section>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>Bạn chưa đặt đồ ăn nào.</p>
+    <?php endif; ?>
+</section>
+
 </body>
 </html>
