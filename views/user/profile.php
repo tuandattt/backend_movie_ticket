@@ -119,38 +119,67 @@ unset($_SESSION['success_message'], $_SESSION['error_message']);
 
     <!-- Hiển thị lịch sử đặt vé -->
     <section>
-        <h2>Lịch Sử Đặt Vé</h2>
-        <?php if ($bookingResult->num_rows > 0): ?>
-            <table>
-                <thead>
+    <h2>Lịch Sử Đặt Vé</h2>
+    <?php if ($bookingResult->num_rows > 0): ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID Đặt Vé</th>
+                    <th>Ngày Đặt</th>
+                    <th>Tên Phim</th>
+                    <th>Ngày Chiếu</th>
+                    <th>Giờ Chiếu</th>
+                    <th>Số Ghế</th>
+                    <th>Trạng Thái</th>
+                    <th>Mã QR</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($booking = $bookingResult->fetch_assoc()): ?>
                     <tr>
-                        <th>ID Đặt Vé</th>
-                        <th>Ngày Đặt</th>
-                        <th>Tên Phim</th>
-                        <th>Ngày Chiếu</th>
-                        <th>Giờ Chiếu</th>
-                        <th>Số Ghế</th>
-                        <th>Trạng Thái</th>
+                        <td><?php echo htmlspecialchars($booking['booking_id']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['booking_date']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['title']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['show_date']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['show_time']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['seat_number']); ?></td>
+                        <td><?php echo htmlspecialchars($booking['status']); ?></td>
+                        <td>
+                            <?php
+                            // Tạo mã QR nếu trạng thái là "booked"
+                            $qrContent = sprintf(
+                                "Ngày Đặt: %s\nTên Phim: %s\nNgày Chiếu: %s\nGiờ Chiếu: %s\nSố Ghế: %s",
+                                $booking['booking_date'],
+                                $booking['title'],
+                                $booking['show_date'],
+                                $booking['show_time'],
+                                $booking['seat_number']
+                            );
+
+                            $qrDir = $_SERVER['DOCUMENT_ROOT'] . '/movie_booking/assets/qrcodes/';
+                            $qrUrl = '/movie_booking/assets/qrcodes/';
+                            if (!is_dir($qrDir)) {
+                                mkdir($qrDir, 0777, true);
+                            }
+
+                            $qrFile = $qrDir . "booking_" . $booking['booking_id'] . ".png";
+
+                            // Kiểm tra và tạo file QR Code nếu chưa tồn tại
+                            if (!file_exists($qrFile)) {
+                                include_once '../../includes/phpqrcode/qrlib.php';
+                                QRcode::png($qrContent, $qrFile, QR_ECLEVEL_L, 4);
+                            }
+                            ?>
+                            <img src="<?php echo $qrUrl . "booking_" . $booking['booking_id'] . ".png"; ?>" alt="QR Code" width="100">
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <?php while ($booking = $bookingResult->fetch_assoc()): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($booking['booking_id']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['booking_date']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['title']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['show_date']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['show_time']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['seat_number']); ?></td>
-                            <td><?php echo htmlspecialchars($booking['status']); ?></td>
-                        </tr>
-                    <?php endwhile; ?>
-                </tbody>
-            </table>
-        <?php else: ?>
-            <p>Bạn chưa đặt vé nào.</p>
-        <?php endif; ?>
-    </section>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+    <?php else: ?>
+        <p>Bạn chưa đặt vé nào.</p>
+    <?php endif; ?>
+</section>
 
     <!-- Hiển thị lịch sử đặt đồ ăn -->
     <section>
