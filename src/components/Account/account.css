@@ -1,0 +1,154 @@
+/* Đặt màu nền cho toàn trang */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  /* Container chính để căn chỉnh các phần tử */
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    flex-grow: 1; /* Cho phép container kéo dài theo chiều cao của màn hình */
+    overflow-y: auto; /* Thêm scroll nếu cần */
+  }
+  
+  /* Tiêu đề chính */
+  h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007BFF;
+  }
+  
+  /* Section: Thông tin cá nhân */
+  .personal-info {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 80%;
+    margin-bottom: 40px;
+  }
+  
+  .personal-info h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .personal-info .info-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .personal-info .avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 20px;
+  }
+  
+  .personal-info .user-details p {
+    margin: 5px 0;
+    font-size: 1rem;
+  }
+  
+  .personal-info .user-details strong {
+    color: #555;
+  }
+  
+  /* Bảng lịch sử đặt vé */
+  .booking-history, .food-order-history {
+    width: 80%;
+    max-width: 100%;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-x: auto; /* Thêm scroll ngang nếu bảng rộng hơn màn hình */
+    margin-bottom: 40px;
+    height: 30vh; /* Chiều cao bảng chiếm 30% chiều cao màn hình */
+    overflow-y: auto; /* Thêm scroll dọc nếu nội dung vượt quá chiều cao */
+    padding: 20px;
+  }
+  
+  /* Định dạng bảng */
+  .booking-history table, .food-order-history table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #007BFF;
+    color: white;
+  }
+  
+  td {
+    background-color: #f9f9f9;
+  }
+  
+  .booking-history th, .food-order-history th {
+    font-size: 1rem;
+  }
+  
+  .booking-history td, .food-order-history td {
+    font-size: 0.9rem;
+  }
+  
+  /* Section: Lịch sử đặt đồ ăn */
+  .food-order-history h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Button và liên kết */
+  a {
+    text-decoration: none;
+    color: #007BFF;
+    font-weight: bold;
+  }
+  
+  button {
+    padding: 8px 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  .back-home-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .back-home-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  

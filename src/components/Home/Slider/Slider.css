@@ -1,0 +1,115 @@
+/* Slider container */
+.slider-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 450px; /* Chiều cao slider */
+}
+
+/* Wrapper for slider items */
+.slider-wrapper {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  width: 100%;
+}
+
+/* Individual slider items */
+.slider-item {
+  min-width: 100%;
+  height: 100%; /* Chiều cao mỗi slide */
+}
+
+.slider-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Đảm bảo ảnh phủ kín slide */
+}
+
+/* Navigation buttons */
+.slider-btn {
+  position: absolute;
+  top: 0; /* Đặt lên đầu slider */
+  width: 50px;
+  height: 100%; /* Cao bằng slider */
+  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.1),
+    transparent
+  ); /* Hiệu ứng mờ dần */
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: none; /* Bóng mờ */
+}
+
+.slider-btn.left {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.1),
+    transparent
+  ); /* Mờ dần sang trái */
+}
+
+.slider-btn.right {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.5),
+    rgba(0, 0, 0, 0.1),
+    transparent
+  ); /* Mờ dần sang phải */
+}
+
+.slider-btn.left:hover {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.3),
+    transparent
+  ); /* Mờ dần sang trái */
+}
+
+.slider-btn.right:hover {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(0, 0, 0, 0.7),
+    rgba(0, 0, 0, 0.3),
+    transparent
+  ); /* Mờ dần sang trái */
+}
+
+/* Indicators */
+.slider-indicators {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 4;
+}
+
+.indicator {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.indicator.active {
+  background: #70d2ed;
+}

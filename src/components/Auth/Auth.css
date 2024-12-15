@@ -1,0 +1,187 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
+
+.auth-background {
+  display: grid;
+  height: 100vh;
+  width: 100vw;
+  place-items: center;
+  background: url("/public/img/background_img.jpg") no-repeat center
+    center/cover;
+  /* background: linear-gradient(-135deg, #c850c0, #4158d0); */
+}
+
+::selection {
+  background: #70d2ed;
+  color: #fff;
+}
+
+.wrapper {
+  width: 380px;
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.1);
+}
+
+.wrapper .title {
+  font-size: 30px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 90px;
+  color: #fff;
+  user-select: none;
+  border-radius: 15px 15px 0 0;
+  background: #70d2ed;
+}
+
+.wrapper form {
+  padding: 10px 30px 30px 30px;
+}
+
+.wrapper form .field {
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+  position: relative;
+}
+
+.wrapper form .field input {
+  height: 100%;
+  width: 100%;
+  outline: none;
+  font-size: 13px;
+  font-family: "Bahnschrift", sans-serif;
+  padding-left: 20px;
+  border: 1px solid lightgrey;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.wrapper form .field input:focus,
+form .field input:valid {
+  border-color: #70d2ed;
+}
+
+.wrapper form .field label {
+  position: absolute;
+  top: 50%;
+  left: 20px;
+  color: #999999;
+  font-weight: 400;
+  font-size: 13px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  transition: all 0.3s ease;
+}
+
+/* Xử lý cho trình duyệt khi autofill */
+.wrapper form .field input:-webkit-autofill {
+  font-family: "Bahnschrift", "Poppins", Arial, sans-serif !important;
+  font-size: 13px !important;
+  -webkit-text-fill-color: #000 !important; /* Bắt buộc màu chữ */
+  -webkit-box-shadow: 0 0 0 30px white inset !important; /* Xóa nền mặc định */
+}
+
+.wrapper form .field input:-webkit-autofill ~ label {
+  top: -15%;
+  font-size: 13px;
+  font-family: "Bahnschrift", "Poppins", Arial, sans-serif;
+  color: #70d2ed;
+  transform: translateY(-50%);
+}
+
+form .field label.active {
+  top: -15%;
+  font-size: 13px;
+  color: #70d2ed;
+  transform: translateY(-50%);
+}
+
+form .field input:focus ~ label,
+form .field input:valid ~ label {
+  top: -15%;
+  font-size: 13px;
+  color: #70d2ed;
+  transform: translateY(-50%);
+}
+
+form .content {
+  display: flex;
+  width: 100%;
+  height: 50px;
+  font-size: 13px;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 3px;
+}
+
+form .content .checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form .content input {
+  width: 15px;
+  height: 15px;
+  background: red;
+}
+
+form .content label {
+  color: #262626;
+  user-select: none;
+  padding-left: 5px;
+}
+
+form .content .pass-link {
+  color: "";
+}
+
+form .field input[type="submit"] {
+  color: #fff;
+  border: none;
+  padding-left: 0;
+  margin-top: 3px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  background: #70d2ed;
+  transition: all 0.3s ease;
+}
+
+form .field input[type="submit"]:active {
+  transform: scale(0.95);
+}
+
+form .signup-link {
+  color: #262626;
+  margin-top: 12px;
+  text-align: center;
+  font-size: 13px;
+}
+
+form .pass-link a,
+form .signup-link a {
+  color: #70d2ed;
+  text-decoration: none;
+}
+
+form .pass-link a:hover,
+form .signup-link a:hover {
+  text-decoration: underline;
+}
+
+form .signin-link {
+  color: #262626;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+}
+
+form .signin-link a {
+  color: #70d2ed;
+  text-decoration: none;
+}
+
+form .signin-link a:hover {
+  text-decoration: underline;
+}

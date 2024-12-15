@@ -1,0 +1,78 @@
+/* Styles for the movie detail page */
+
+.movie-detail-container {
+    display: flex;
+    gap: 20px;
+    margin: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .movie-detail-poster {
+    flex: 1;
+    max-width: 300px;
+  }
+  
+  .movie-detail-poster img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .movie-detail-info {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .movie-detail-info h1 {
+    font-size: 2rem;
+    margin: 0 0 10px;
+    color: #333;
+  }
+  
+  .movie-detail-info .genres {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .movie-detail-info .release-date {
+    font-size: 1rem;
+    color: #888;
+    margin-bottom: 20px;
+  }
+  
+  .movie-detail-info .duration {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .movie-detail-info .synopsis {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #444;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .movie-detail-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .movie-detail-poster {
+      max-width: 80%;
+    }
+  
+    .movie-detail-info {
+      margin-top: 20px;
+      text-align: center;
+    }
+  }
+  

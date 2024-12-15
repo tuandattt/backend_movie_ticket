@@ -1,0 +1,182 @@
+.booking-page {
+  padding: 20px;
+  background: #70d2ed;
+  min-height: 100vh;
+}
+
+.booking-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.film-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.seat-map-container {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.seat-map {
+  flex: 3;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.screen {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+.seat-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.seat-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.seat {
+  width: 40px;
+  height: 40px;
+  background: #ccc; /* ghế trống */
+  margin: 5px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 40px;
+  text-align: center;
+  color: #000;
+  cursor: pointer;
+  position: relative;
+}
+
+.seat.selected {
+  background: #70d2ed;
+  color: #fff;
+}
+
+.seat.sold {
+  background: #f33;
+  color: #fff;
+  cursor: not-allowed;
+}
+
+.legend {
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  align-items: center;
+  justify-content: center;
+}
+
+.legend-seat {
+  width: 20px;
+  height: 20px;
+  background: #ccc;
+  display: inline-block;
+  margin-right: 5px;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+.legend-seat.selected {
+  background: #70d2ed;
+}
+
+.legend-seat.sold {
+  background: #f33;
+}
+
+.booking-info {
+  flex: 2;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.booking-info h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.booking-info p {
+  margin: 8px 0;
+}
+
+.continue-button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #70d2ed;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.continue-button:hover {
+  background: #0056b3;
+}
+
+.seat.double {
+  width: 80px;
+}
+
+/* Bạn có thể tùy chỉnh ::before, ::after để ghế đôi trông liền mạch hơn */
+.double-seat .seat {
+  margin: 0 2px;
+}
+
+.movie-details {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.movie-poster {
+  width: 150px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.movie-info {
+  flex: 1;
+}
+
+.movie-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.movie-subtitle {
+  font-size: 16px;
+  color: #555;
+  margin: 5px 0;
+}
+
+.schedule-details {
+  margin-top: 20px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 20px 0;
+}

@@ -1,0 +1,57 @@
+.pricing-container {
+    padding: 20px;
+    text-align: center;
+    
+  }
+  
+  .pricing-table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 50%;
+  }
+  
+  .pricing-table th, .pricing-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  .pricing-table th {
+    background-color: #007BFF;
+    font-weight: bold;
+  }
+
+    /* Button và liên kết */
+    a {
+        text-decoration: none;
+        color: #007BFF;
+        font-weight: bold;
+      }
+      
+      button {
+        padding: 8px 15px;
+        background-color: #007BFF;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+      }
+      
+      button:hover {
+        background-color: #0056b3;
+      }
+    
+      .back-home-btn {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+      }
+      
+      .back-home-btn:hover {
+        background-color: #0056b3;
+      }
+      
