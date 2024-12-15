@@ -11,6 +11,9 @@ const Payment = () => {
   const [userInfo, setUserInfo] = useState(null); // Thông tin người dùng
   const [discount, setDiscount] = useState(0); // Giảm giá
   const [discountDetails, setDiscountDetails] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false); // Trạng thái xử lý thanh toán
+
+  const navigate = useNavigate();
 
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":"); // Lấy giờ và phút
@@ -151,11 +154,45 @@ const Payment = () => {
     ));
   };
 
-  const navigate = useNavigate();
-  const handleContinue = () => {
-    navigate("/next-step", {
-      state: { scheduleInfo, selectedSeats, totalPrice },
-    });
+  const handleContinue = async () => {
+    setIsProcessing(true);
+
+    // Tính số tiền sau khi giảm giá
+    const finalAmount = totalPrice - discount;
+
+    try {
+      // Gửi dữ liệu về backend để tạo payment
+      const response = await fetch(
+        "http://localhost/web-project/backend/api/create_payment.php",
+        {
+          credentials: "include",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: finalAmount, // Gửi giá trị amount sau khi giảm giá
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        navigate("/confirm-payment", {
+          state: {
+            paymentId: data.payment_id,
+            totalPrice: finalAmount,
+            scheduleId: scheduleInfo.schedule_id, // Truyền thêm schedule_id
+            selectedSeats,
+          },
+        });
+      } else {
+        alert("Không thể tạo giao dịch. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tạo giao dịch:", error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (!scheduleInfo) {
@@ -255,14 +292,16 @@ const Payment = () => {
                 <button
                   className="payment-back-button"
                   onClick={() => navigate(-1)}
+                  disabled={isProcessing}
                 >
                   Quay Lại
                 </button>
                 <button
                   className="payment-continue-button"
                   onClick={handleContinue}
+                  disabled={isProcessing}
                 >
-                  Tiếp Tục
+                  {isProcessing ? "Đang xử lý..." : "Tiếp Tục"}
                 </button>
               </div>
             </div>

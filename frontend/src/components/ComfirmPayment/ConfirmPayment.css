@@ -1,0 +1,46 @@
+.confirm-payment-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #70d2ed;
+}
+
+.confirm-payment-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.qr-code-section {
+  margin: 20px 0;
+}
+
+.payment-details {
+  margin: 20px 0;
+  font-size: 16px;
+}
+
+.payment-actions {
+  display: flex;
+  margin-top: 20px;
+}
+
+.cancel-button {
+  background-color: #f33;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  background-color: #d11;
+}
+
+
