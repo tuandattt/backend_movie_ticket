@@ -181,8 +181,9 @@ const Payment = () => {
           state: {
             paymentId: data.payment_id,
             totalPrice: finalAmount,
-            scheduleId: scheduleInfo.schedule_id, // Truyền thêm schedule_id
+            scheduleInfo, // Truyền thêm schedule_id
             selectedSeats,
+            userInfo,
           },
         });
       } else {

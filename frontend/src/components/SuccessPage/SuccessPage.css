@@ -1,0 +1,60 @@
+.success-page-wrapper {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-page-container {
+  max-width: 600px;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.success-page-container h1 {
+  color: #28a745;
+}
+
+.success-message {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.success-user-info,
+.success-payment-info,
+.success-schedule-info {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.success-user-info h2,
+.success-payment-info h2,
+.success-schedule-info h2 {
+  color: #333;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.success-user-info p,
+.success-payment-info p,
+.success-schedule-info p {
+  margin: 6px 0;
+}
+
+.back-home-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-home-button:hover {
+  background-color: #218838;
+}

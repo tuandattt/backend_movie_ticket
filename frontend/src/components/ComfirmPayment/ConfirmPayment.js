@@ -9,7 +9,8 @@ const ConfirmPayment = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { paymentId, totalPrice } = location.state || {};
+  const { paymentId, totalPrice, selectedSeats, scheduleInfo, userInfo } =
+    location.state || {};
 
   const [countdown, setCountdown] = useState(300); // 300 giây = 5 phút
   const [paymentStatus, setPaymentStatus] = useState("pending"); // Trạng thái giao dịch
@@ -43,7 +44,15 @@ const ConfirmPayment = () => {
         if (data.status === "success" && data.payment_status === "confirmed") {
           setPaymentStatus("confirmed");
           alert("Thanh toán thành công!");
-          navigate("/success"); // Điều hướng sang trang thông báo thành công
+          navigate("/success", {
+            state: {
+              paymentId,
+              totalPrice,
+              selectedSeats,
+              scheduleInfo,
+              userInfo,
+            },
+          });   // Điều hướng sang trang thông báo thành công
         }
       } catch (error) {
         console.error("Lỗi khi kiểm tra trạng thái giao dịch:", error);
@@ -94,7 +103,9 @@ const ConfirmPayment = () => {
           <h2>Xác Nhận Thanh Toán</h2>
           <div className="qr-code-section">
             <QRCodeCanvas
-              value={`http://localhost/web-project/backend/api/confirm_payment.php?payment_id=${paymentId}`}
+              value={`http://192.168.1.2/web-project/backend/api/confirm_payment.php?payment_id=${paymentId}&schedule_id=${
+                scheduleInfo.schedule_id
+              }&selected_seats=${selectedSeats.join(",")}`}
               size={256}
             />
           </div>

@@ -237,6 +237,10 @@
   text-align: center;
 }
 
+.showtime-item:hover {
+  background-color: #70d2ed;
+}
+
 .showtime {
   font-size: 18px;
   font-weight: bold;
