@@ -13,6 +13,10 @@ const Header = () => {
     navigate("/"); // Điều hướng về màn hình chính
   };
 
+  const handleAccountClick = () => {
+    navigate("/account"); // Điều hướng đến màn hình tài khoản
+  };
+
   return (
     <>
       <div className="top-heading">
@@ -43,7 +47,9 @@ const Header = () => {
           <ul className="header-menu">
             <li>Lịch chiếu</li>
             <li>Giá vé</li>
-            <li>Thông tin tài khoản</li>
+            <li onClick={handleAccountClick} style={{ cursor: "pointer" }}>
+              Thông tin tài khoản
+            </li>
           </ul>
         </nav>
       </header>

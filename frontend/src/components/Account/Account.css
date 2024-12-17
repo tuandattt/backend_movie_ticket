@@ -1,0 +1,138 @@
+.account-page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Đảm bảo trang có chiều cao tối thiểu bằng viewport */
+}
+
+.account-page-content-wrapper {
+  flex: 1; /* Chiếm phần còn lại để đẩy footer xuống */
+  display: flex;
+  justify-content: center; /* Căn giữa nội dung */
+  align-items: flex-start;
+  padding: 20px 0;
+}
+
+/* Container chính */
+.account-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto; /* Căn giữa */
+}
+
+/* Background trắng cho nội dung */
+.account-content-wrapper {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  margin-bottom: 20px; /* Khoảng cách dưới cùng */
+}
+
+.image-upload {
+  display: flex; /* Flexbox để xếp ngang */
+  align-items: flex-end; /* Căn trên cùng theo chiều dọc */
+  gap: 20px; /* Khoảng cách giữa các phần tử */
+  justify-content: flex-start; /* Căn các phần tử về phía bên trái */
+  width: 100%; /* Chiếm toàn bộ chiều rộng của container */
+  margin-bottom: 30px;
+}
+
+.image-upload-controls {
+  display: flex; /* Sắp xếp các nút dọc theo chiều trên-dưới */
+  flex-direction: column; /* Xếp các phần tử con theo chiều dọc */
+  gap: 10px; /* Khoảng cách giữa các phần tử con */
+}
+
+.account-avatar-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+.account-avatar-input {
+  padding: 6px;
+  font-size: 14px;
+}
+
+.account-avatar-button {
+  padding: 8px 16px;
+  background-color: #70d2ed;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Form container */
+.account-user-info-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.account-form-group {
+  flex: 0 0 48%; /* Chiều rộng mỗi ô input chiếm khoảng 48% để chia đôi hàng */
+  display: flex;
+  flex-direction: column;
+}
+
+.account-form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.account-required {
+  color: red;
+}
+
+.account-input {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  outline: none;
+}
+
+.account-input:focus {
+  border-color: #70d2ed;
+}
+
+.account-save-info-btn {
+  margin: 20px auto 0; /* Canh giữa theo chiều ngang */
+  padding: 10px 20px;
+  background-color: #70d2ed;
+  color: white;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  display: block; /* Giúp nút có thể căn giữa */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.account-avatar-button:hover,
+.account-save-info-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.account-input-readonly {
+  background-color: #f5f5f5b1; /* Màu nền xám nhạt */
+  cursor: not-allowed; /* Con trỏ chuột đổi thành not-allowed */
+  color: #888; /* Màu chữ xám nhạt */
+}

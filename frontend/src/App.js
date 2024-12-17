@@ -12,6 +12,7 @@ import ConfirmPayment from "./components/ComfirmPayment/ConfirmPayment";
 import SuccessPage from "./components/SuccessPage/SuccessPage";
 import AuthProvider from "./context/AuthContext";
 import "./App.css";
+import Account from "./components/Account/Account";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/confirm-payment" element={<ConfirmPayment />} />
           <Route path="/success" element={<SuccessPage />} />
+          <Route path="/account" element={<Account />} />
         </Routes>
         <Toaster
           richColors

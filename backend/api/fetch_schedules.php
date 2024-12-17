@@ -30,8 +30,42 @@ $result = $stmt->get_result();
 
 $schedules = [];
 while ($row = $result->fetch_assoc()) {
+    $schedule_id = $row['schedule_id'];
+    $available_seats = $row['available_seats'];
+
+    // Truy vấn để lấy các ghế đã đặt từ bảng bookings
+    $check_double_seat_query = "
+        SELECT seat_number 
+        FROM bookings 
+        WHERE schedule_id = ? 
+    ";
+    $check_double_seat_stmt = $conn->prepare($check_double_seat_query);
+    $check_double_seat_stmt->bind_param("i", $schedule_id);
+    $check_double_seat_stmt->execute();
+    $check_double_seat_stmt->store_result();
+
+    // Khai báo biến để bind dữ liệu
+    $check_double_seat_stmt->bind_result($seat_number);
+
+    // Duyệt qua các ghế đã đặt và tính số ghế đã bị đặt
+    while ($check_double_seat_stmt->fetch()) {
+        // Kiểm tra xem seat_number có phải là ghế đôi (có dấu "-")
+        if (strpos($seat_number, '-') !== false) {
+            // Nếu là ghế đôi, giảm số ghế trống đi 2
+            $available_seats -= 2;
+        } else {
+            // Nếu là ghế đơn, giảm số ghế trống đi 1
+            $available_seats -= 1;
+        }
+    }
+
+    // Cập nhật lại số ghế trống cho lịch chiếu này
+    $row['available_seats'] = $available_seats;
+
+    // Thêm lịch chiếu đã cập nhật vào mảng kết quả
     $schedules[] = $row;
 }
 
+// Trả kết quả về dưới dạng JSON
 echo json_encode($schedules);
 ?>
