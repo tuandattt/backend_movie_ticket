@@ -188,3 +188,34 @@
 .membership-info-table tr:hover {
   background-color: #f1f1f1;
 }
+
+.cinema-journey-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.cinema-journey-table th,
+.cinema-journey-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.cinema-journey-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.cinema-journey-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.cinema-journey-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.cinema-journey-table td {
+  color: #333;
+}

@@ -9,6 +9,18 @@ const Account = () => {
 
   const [membershipInfo, setMembershipInfo] = useState(null);
   const [activeTab, setActiveTab] = useState("info"); // State để quản lý tab
+  const [cinemaJourney, setCinemaJourney] = useState([]);
+
+  const formatTime = (time) => {
+    const [hours, minutes] = time.split(":"); // Lấy giờ và phút
+    return `${hours}:${minutes}`;
+  };
+
+  // Định dạng ngày chiếu (dd/mm/yyyy)
+  const formatDate = (date) => {
+    const [year, month, day] = date.split("-"); // Tách chuỗi yyyy-mm-dd
+    return `${day}/${month}/${year}`; // Trả về dd/mm/yyyy
+  };
 
   // State lưu thông tin người dùng
   const [userInfo, setUserInfo] = useState({
@@ -134,10 +146,31 @@ const Account = () => {
     }
   };
 
+  const fetchCinemaJourney = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost/web-project/backend/api/get_cinema_journey.php",
+        { credentials: "include" }
+      );
+      const result = await response.json();
+
+      if (result.status === "success") {
+        setCinemaJourney(result.data);
+      } else {
+        alert("Không thể lấy thông tin hành trình điện ảnh!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy hành trình điện ảnh:", error);
+    }
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "membership") {
       fetchMembershipInfo();
+    }
+    if (tab === "journey") {
+      fetchCinemaJourney();
     }
   };
 
@@ -292,9 +325,44 @@ const Account = () => {
                     <tr>
                       <td>{membershipInfo.user_id}</td>
                       <td>{membershipInfo.membership_level}</td>
-                      <td>{membershipInfo.activated_date}</td>
+                      <td>{formatDate(membershipInfo.activated_date)}</td>
                       <td>{membershipInfo.total_spent.toLocaleString()} đ</td>
                     </tr>
+                  </tbody>
+                </table>
+              )}
+
+              {activeTab === "journey" && (
+                <table className="cinema-journey-table">
+                  <thead>
+                    <tr>
+                      <th>MÃ HÓA ĐƠN</th>
+                      <th>PHIM</th>
+                      <th>RẠP CHIẾU</th>
+                      <th>SUẤT CHIẾU</th>
+                      <th>GHẾ ĐÃ ĐẶT</th>
+                      <th>NGÀY ĐẶT</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cinemaJourney.length > 0 ? (
+                      cinemaJourney.map((item) => (
+                        <tr key={item.order_id}>
+                          <td>{item.order_id}</td>
+                          <td>{item.movie_title}</td>
+                          <td>{item.theater}</td>
+                          <td>{formatTime(item.showtime)}</td>
+                          <td>{item.booked_seats}</td>
+                          <td>{formatDate(item.booking_date)}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6">
+                          Không có dữ liệu hành trình điện ảnh.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               )}
