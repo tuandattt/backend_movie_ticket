@@ -7,6 +7,9 @@ import Footer from "../Home/Footer/Footer";
 const Account = () => {
   const navigate = useNavigate();
 
+  const [membershipInfo, setMembershipInfo] = useState(null);
+  const [activeTab, setActiveTab] = useState("info"); // State để quản lý tab
+
   // State lưu thông tin người dùng
   const [userInfo, setUserInfo] = useState({
     avatar: "",
@@ -113,6 +116,31 @@ const Account = () => {
     }
   };
 
+  const fetchMembershipInfo = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost/web-project/backend/api/get_membership_info.php",
+        { credentials: "include" }
+      );
+      const result = await response.json();
+
+      if (result.status === "success") {
+        setMembershipInfo(result.data);
+      } else {
+        alert("Không thể lấy thông tin thẻ thành viên!");
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy thông tin thẻ thành viên:", error);
+    }
+  };
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+    if (tab === "membership") {
+      fetchMembershipInfo();
+    }
+  };
+
   // Xử lý thay đổi trong input
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -126,99 +154,150 @@ const Account = () => {
         <div className="account-page-content-wrapper">
           <div className="account-container">
             {/* Div bao bọc với background white */}
+            <div className="account-nav-tabs">
+              <div
+                className={`account-tab ${
+                  activeTab === "info" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("info")}
+              >
+                THÔNG TIN TÀI KHOẢN
+              </div>
+              <div
+                className={`account-tab ${
+                  activeTab === "membership" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("membership")}
+              >
+                THẺ THÀNH VIÊN
+              </div>
+              <div
+                className={`account-tab ${
+                  activeTab === "journey" ? "active" : ""
+                }`}
+                onClick={() => handleTabClick("journey")}
+              >
+                HÀNH TRÌNH ĐIỆN ẢNH
+              </div>
+            </div>
             <div className="account-content-wrapper">
-              {/* Phần tải ảnh đại diện */}
-              <div className="image-upload">
-                <img
-                  src={
-                    userInfo.avatar
-                      ? `http://localhost:3000${userInfo.avatar}`
-                      : "img/no-image.png"
-                  }
-                  alt="Avatar"
-                  className="account-avatar-preview"
-                />
+              {activeTab === "info" && (
+                <>
+                  {/* Phần tải ảnh đại diện */}
+                  <div className="image-upload">
+                    <img
+                      src={
+                        userInfo.avatar
+                          ? `http://localhost:3000${userInfo.avatar}`
+                          : "img/no-image.png"
+                      }
+                      alt="Avatar"
+                      className="account-avatar-preview"
+                    />
+                    <div className="image-upload-controls">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="account-avatar-input"
+                        onChange={handleAvatarChange}
+                      />
+                      <button
+                        className="account-avatar-button"
+                        onClick={handleSaveAvatar}
+                      >
+                        Lưu Ảnh
+                      </button>
+                    </div>
+                  </div>
 
-                <div className="image-upload-controls">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="account-avatar-input"
-                    onChange={handleAvatarChange}
-                  />
-                  <button
-                    className="account-avatar-button"
-                    onClick={handleSaveAvatar}
-                  >
-                    Lưu Ảnh
-                  </button>
-                </div>
-              </div>
+                  {/* Form cập nhật thông tin */}
+                  <div className="account-user-info-form">
+                    <div className="account-form-group">
+                      <label>
+                        <span className="account-required">*</span> Họ tên
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        value={userInfo.name}
+                        placeholder="Nhập họ tên"
+                        className="account-input"
+                        onChange={handleChange}
+                      />
+                    </div>
 
-              {/* Form cập nhật thông tin */}
-              <div className="account-user-info-form">
-                <div className="account-form-group">
-                  <label>
-                    <span className="account-required">*</span> Họ tên
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={userInfo.name}
-                    placeholder="Nhập họ tên"
-                    className="account-input"
-                    onChange={handleChange}
-                  />
-                </div>
+                    <div className="account-form-group">
+                      <label>
+                        <span className="account-required">*</span> Email
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={userInfo.email}
+                        className="account-input account-input-readonly"
+                        readOnly
+                      />
+                    </div>
 
-                <div className="account-form-group">
-                  <label>
-                    <span className="account-required">*</span> Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={userInfo.email}
-                    className="account-input account-input-readonly"
-                    readOnly
-                  />
-                </div>
+                    <div className="account-form-group">
+                      <label>
+                        <span className="account-required">*</span> Tuổi
+                      </label>
+                      <input
+                        type="number"
+                        name="age"
+                        value={userInfo.age}
+                        placeholder="Nhập tuổi"
+                        className="account-input"
+                        onChange={handleChange}
+                      />
+                    </div>
 
-                <div className="account-form-group">
-                  <label>
-                    <span className="account-required">*</span> Tuổi
-                  </label>
-                  <input
-                    type="number"
-                    name="age"
-                    value={userInfo.age}
-                    placeholder="Nhập tuổi"
-                    className="account-input"
-                    onChange={handleChange}
-                  />
-                </div>
+                    <div className="account-form-group">
+                      <label>
+                        <span className="account-required">*</span> Số điện
+                        thoại
+                      </label>
+                      <input
+                        type="text"
+                        name="phone_number"
+                        value={userInfo.phone_number}
+                        placeholder="Nhập số điện thoại"
+                        className="account-input"
+                        onChange={handleChange}
+                      />
+                    </div>
 
-                <div className="account-form-group">
-                  <label>
-                    <span className="account-required">*</span> Số điện thoại
-                  </label>
-                  <input
-                    type="text"
-                    name="phone_number"
-                    value={userInfo.phone_number}
-                    placeholder="Nhập số điện thoại"
-                    className="account-input"
-                    onChange={handleChange}
-                  />
-                </div>
+                    <button
+                      className="account-save-info-btn"
+                      onClick={handleSaveInfo}
+                    >
+                      Cập Nhật Thông Tin
+                    </button>
+                  </div>
+                </>
+              )}
 
-                <button
-                  className="account-save-info-btn"
-                  onClick={handleSaveInfo}
-                >
-                  Cập Nhật Thông Tin
-                </button>
-              </div>
+              {activeTab === "membership" && membershipInfo && (
+                <table className="membership-info-table">
+                  <thead>
+                    <tr>
+                      <th>SỐ THẺ</th>
+                      <th>HẠNG THẺ</th>
+                      <th>NGÀY KÍCH HOẠT</th>
+                      <th>TỔNG CHI TIÊU</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{membershipInfo.user_id}</td>
+                      <td>{membershipInfo.membership_level}</td>
+                      <td>{membershipInfo.activated_date}</td>
+                      <td>{membershipInfo.total_spent.toLocaleString()} đ</td>
+                    </tr>
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>

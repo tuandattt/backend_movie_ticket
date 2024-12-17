@@ -22,6 +22,33 @@
   margin: 0 auto; /* Căn giữa */
 }
 
+/* Tabs Container */
+.account-nav-tabs {
+  display: flex;
+  justify-content: flex-start; /* Căn các tab về phía bên trái */
+  background-color: white; /* Nền xám nhạt */
+  border: 3px solid #ddd; /* Đường kẻ dưới */
+  margin-bottom: 21px; /* Khoảng cách với phần content bên dưới */
+}
+
+.account-tab {
+  padding: 12px 21px; /* Khoảng cách bên trong từng tab */
+  font-size: 15px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer; /* Đổi con trỏ thành hand */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.account-tab:hover {
+  background-color: #e0e0e0; /* Màu nền khi hover */
+}
+
+.account-tab.active {
+  background-color: #70d2ed; /* Nền xanh đậm */
+  color: white; /* Màu chữ trắng */
+}
+
 /* Background trắng cho nội dung */
 .account-content-wrapper {
   background-color: white;
@@ -135,4 +162,29 @@
   background-color: #f5f5f5b1; /* Màu nền xám nhạt */
   cursor: not-allowed; /* Con trỏ chuột đổi thành not-allowed */
   color: #888; /* Màu chữ xám nhạt */
+}
+
+.membership-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.membership-info-table th,
+.membership-info-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.membership-info-table th {
+  background-color: #f5f5f5;
+}
+
+.membership-info-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.membership-info-table tr:hover {
+  background-color: #f1f1f1;
 }
