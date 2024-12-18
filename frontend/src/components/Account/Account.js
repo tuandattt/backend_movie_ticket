@@ -326,7 +326,15 @@ const Account = () => {
                       <td>{membershipInfo.user_id}</td>
                       <td>{membershipInfo.membership_level}</td>
                       <td>{formatDate(membershipInfo.activated_date)}</td>
-                      <td>{membershipInfo.total_spent.toLocaleString()} đ</td>
+                      <td>
+                        {parseFloat(membershipInfo.total_spent) % 1 === 0
+                          ? parseInt(
+                              membershipInfo.total_spent
+                            ).toLocaleString() + " VND"
+                          : parseFloat(
+                              membershipInfo.total_spent
+                            ).toLocaleString() + " VND"}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -340,7 +348,9 @@ const Account = () => {
                       <th>PHIM</th>
                       <th>RẠP CHIẾU</th>
                       <th>SUẤT CHIẾU</th>
+                      <th>NGÀY CHIẾU</th>
                       <th>GHẾ ĐÃ ĐẶT</th>
+                      <th>ĐÃ THANH TOÁN</th>
                       <th>NGÀY ĐẶT</th>
                     </tr>
                   </thead>
@@ -352,13 +362,17 @@ const Account = () => {
                           <td>{item.movie_title}</td>
                           <td>{item.theater}</td>
                           <td>{formatTime(item.showtime)}</td>
+                          <td>{formatDate(item.show_date)}</td>
                           <td>{item.booked_seats}</td>
+                          <td>
+                            {parseFloat(item.amount).toLocaleString()} VND
+                          </td>
                           <td>{formatDate(item.booking_date)}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan="6">
+                        <td colSpan="8">
                           Không có dữ liệu hành trình điện ảnh.
                         </td>
                       </tr>

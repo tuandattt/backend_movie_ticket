@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./MovieList.css";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../context/AuthContext";
 
 const MovieList = ({ movies, currentTab }) => {
   const [showPopup, setShowPopup] = useState(false);
@@ -10,6 +11,8 @@ const MovieList = ({ movies, currentTab }) => {
   const [selectedMovieTitle, setSelectedMovieTitle] = useState("");
   const [selectedDate, setSelectedDate] = useState(null); // Ngày được chọn
   const [theaterName, setTheaterName] = useState(""); // Nếu cần hiển thị tên rạp
+
+  const { isLoggedIn } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -37,29 +40,40 @@ const MovieList = ({ movies, currentTab }) => {
     return `${hours}:${minutes}`; // Trả về "HH:MM"
   };
 
+  const handleMovieClick = (movie_id) => {
+    navigate(`/movie?movie_id=${movie_id}`); // Truyền movie_id dưới dạng query string
+  };
+
   const handleBuyTicket = async (movie_id, title) => {
     try {
       const response = await fetch(
         `http://localhost/web-project/backend/api/fetch_schedules.php?movie_id=${movie_id}`
       );
-      const data = await response.json();
-      setScheduleData(data);
-      setSelectedMovieTitle(title);
+      const result = await response.json();
 
-      // Lấy rạp từ dữ liệu (giả sử tất cả suất chiếu chung một rạp, nếu nhiều rạp thì tùy logic)
-      if (data.length > 0) {
-        setTheaterName(data[0].theater);
+      if (result.status === "success" && Array.isArray(result.data)) {
+        setScheduleData(result.data); // Cập nhật dữ liệu lịch chiếu
+      } else {
+        setScheduleData([]); // Gán mảng rỗng nếu không có dữ liệu hợp lệ
       }
 
-      // Chọn ngày mặc định là ngày đầu tiên trong data
-      const uniqueDates = [...new Set(data.map((s) => s.show_date))];
-      if (uniqueDates.length > 0) {
-        setSelectedDate(uniqueDates[0]);
+      setSelectedMovieTitle(title);
+
+      if (result.data.length > 0) {
+        setTheaterName(result.data[0].theater);
+        const uniqueDates = [...new Set(result.data.map((s) => s.show_date))];
+        if (uniqueDates.length > 0) {
+          setSelectedDate(uniqueDates[0]);
+        }
+      } else {
+        setTheaterName(""); // Đặt rạp và ngày mặc định về rỗng nếu không có lịch chiếu
+        setSelectedDate(null);
       }
 
       setShowPopup(true);
     } catch (error) {
       console.error("Lỗi khi lấy lịch chiếu:", error);
+      setScheduleData([]); // Đảm bảo state không chứa dữ liệu lỗi
     }
   };
 
@@ -85,7 +99,11 @@ const MovieList = ({ movies, currentTab }) => {
   return (
     <div className="movie-list">
       {movies.map((movie) => (
-        <div key={movie.movie_id} className="movie-item">
+        <div
+          key={movie.movie_id}
+          className="movie-item"
+          onClick={() => handleMovieClick(movie.movie_id)}
+        >
           <img src={movie.poster} alt={movie.title} />
           <div className="movie-item-content">
             <h3>{movie.title}</h3>
@@ -103,7 +121,10 @@ const MovieList = ({ movies, currentTab }) => {
             ) : (
               <button
                 className="buy-ticket-button"
-                onClick={() => handleBuyTicket(movie.movie_id, movie.title)}
+                onClick={(e) => {
+                  e.stopPropagation(); // Ngăn sự kiện nổi bọt
+                  handleBuyTicket(movie.movie_id, movie.title);
+                }}
               >
                 <strong>MUA VÉ</strong>
               </button>
@@ -144,9 +165,13 @@ const MovieList = ({ movies, currentTab }) => {
                 <div
                   key={sch.schedule_id}
                   className="showtime-item"
-                  onClick={() =>
-                    navigate(`/booking?schedule_id=${sch.schedule_id}`)
-                  }
+                  onClick={() => {
+                    if (isLoggedIn) {
+                      navigate(`/booking?schedule_id=${sch.schedule_id}`);
+                    } else {
+                      navigate("/login"); // Chuyển đến trang đăng nhập nếu chưa đăng nhập
+                    }
+                  }}
                 >
                   <div className="showtime">{formatTime(sch.show_time)}</div>
                   <div className="available-seats">

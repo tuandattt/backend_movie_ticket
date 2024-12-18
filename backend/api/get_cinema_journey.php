@@ -16,12 +16,15 @@ if (!isset($_SESSION['user_id'])) {
 
 $userId = $_SESSION['user_id'];
 
+// Query để lấy thông tin hành trình điện ảnh
 $query = "
     SELECT 
         p.payment_id AS order_id,
         m.title AS movie_title,
         s.theater AS theater,
         s.show_time AS showtime,
+        s.show_date AS show_date, /* Thêm Ngày Chiếu */
+        p.amount AS amount,       /* Thêm Đã Thanh Toán */
         GROUP_CONCAT(b.seat_number SEPARATOR ', ') AS booked_seats,
         DATE(p.created_at) AS booking_date
     FROM payments p
@@ -29,7 +32,7 @@ $query = "
     JOIN schedules s ON b.schedule_id = s.schedule_id
     JOIN movies m ON s.movie_id = m.movie_id
     WHERE p.user_id = ?
-    GROUP BY p.payment_id, m.title, s.theater, s.show_time, p.created_at
+    GROUP BY p.payment_id, m.title, s.theater, s.show_time, s.show_date, p.amount, p.created_at
     ORDER BY p.created_at DESC
 ";
 

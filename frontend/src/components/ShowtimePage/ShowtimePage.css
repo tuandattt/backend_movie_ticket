@@ -1,0 +1,137 @@
+/* Container chính */
+.showtime-container {
+  padding: 20px;
+  background-color: #70d2ed;
+  min-height: 100vh;
+}
+
+/* Thanh chọn ngày */
+/* Thanh chọn ngày - showtime-date-picker */
+.showtime-date-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #70d2ed; /* Màu nền xanh */
+  padding: 10px 0;
+  position: relative; /* Dành cho gạch chân */
+  margin-bottom: 24px;
+}
+
+/* Từng mục ngày */
+.showtime-date-item {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  color: black; /* Màu chữ đen mặc định */
+  padding: 10px 20px;
+  text-transform: uppercase;
+  transition: color 0.3s, transform 0.2s;
+  position: relative;
+}
+
+/* Hiệu ứng khi mục ngày được active */
+.showtime-date-item.showtime-active-date {
+  color: white; /* Chữ trắng khi được chọn */
+  transform: scale(1.1); /* Phóng to nhẹ */
+}
+
+/* Gạch chân bên dưới */
+.showtime-date-item.showtime-active-date::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%; /* Chiều dài gạch chân */
+  height: 3px;
+  background-color: white;
+  transition: width 0.3s ease;
+}
+
+/* Hiệu ứng hover cho mục ngày */
+.showtime-date-item:hover {
+  color: white;
+  transform: scale(1.05);
+}
+
+
+/* Điều chỉnh khoảng cách giữa các mục */
+.showtime-date-item + .showtime-date-item {
+  margin-left: 20px;
+}
+
+/* Danh sách phim */
+.showtime-movie-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.showtime-movie-card {
+  display: flex;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  width: 500px;
+}
+
+.showtime-movie-poster {
+  width: 150px;
+  height: auto;
+  object-fit: cover;
+}
+
+.showtime-movie-details {
+  padding: 10px;
+  flex: 1;
+}
+
+.showtime-movie-title {
+  font-size: 20px;
+  color: black;
+  margin-bottom: 5px;
+}
+
+.showtime-movie-genres {
+  font-size: 14px;
+  color: #666;
+}
+
+.showtime-movie-duration {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Giờ chiếu */
+.showtime-slots-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.showtime-slot-item {
+  background-color: #f1f1f1;
+  padding: 8px 10px;
+  border-radius: 5px;
+  text-align: center;
+  width: 120px;
+  font-size: 14px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.showtime-slot-item:hover {
+    background-color: #70d2ed;
+}
+
+.showtime-time {
+  display: block;
+  font-weight: bold;
+  color: #333;
+}
+
+.showtime-available-seats {
+  font-size: 12px;
+  color: #666;
+}

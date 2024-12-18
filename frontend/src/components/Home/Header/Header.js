@@ -14,7 +14,19 @@ const Header = () => {
   };
 
   const handleAccountClick = () => {
-    navigate("/account"); // Điều hướng đến màn hình tài khoản
+    if (isLoggedIn) {
+      navigate("/account"); // Điều hướng đến màn hình tài khoản
+    } else {
+      navigate("/login"); // Điều hướng đến màn hình đăng nhập nếu chưa đăng nhập
+    }
+  };
+
+  const handleTicketClick = () => {
+    navigate("/price");
+  };
+
+  const handleShowtimesClick = () => {
+    navigate("/showtimes");
   };
 
   return (
@@ -45,8 +57,13 @@ const Header = () => {
         />
         <nav>
           <ul className="header-menu">
-            <li>Lịch chiếu</li>
-            <li>Giá vé</li>
+            <li onClick={handleShowtimesClick} style={{ cursor: "pointer" }}>
+              Lịch chiếu
+            </li>
+
+            <li onClick={handleTicketClick} style={{ cursor: "pointer" }}>
+              Giá vé
+            </li>
             <li onClick={handleAccountClick} style={{ cursor: "pointer" }}>
               Thông tin tài khoản
             </li>

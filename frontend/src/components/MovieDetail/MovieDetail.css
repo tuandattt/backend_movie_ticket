@@ -1,0 +1,150 @@
+/* Container chính */
+.movie-detail-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #70d2ed;
+}
+
+/* Thông tin phim */
+.movie-detail-info {
+  display: flex;
+  width: 100%;
+  max-width: 1100px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.movie-detail-poster {
+  width: 300px;
+  height: auto;
+  object-fit: cover;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.movie-detail-details {
+  padding: 20px 30px; /* Giảm padding để nội dung không bị quá xa */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung theo chiều dọc */
+  gap: 12px; /* Khoảng cách giữa các phần tử */
+}
+
+.movie-detail-details h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.movie-detail-details p {
+  margin-bottom: 4px; /* Giảm khoảng cách giữa các đoạn văn */
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5; /* Giữ dòng chữ cân đối */
+}
+
+.movie-detail-details strong {
+  color: #222;
+}
+
+/* Lịch chiếu */
+.movie-detail-schedules {
+  width: 100%;
+  max-width: 1100px;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-detail-schedules h2 {
+  font-size: 24px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.movie-detail-schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.movie-detail-schedule {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 16px;
+  color: #555;
+}
+
+.movie-detail-schedule:last-child {
+  border-bottom: none;
+}
+
+.movie-detail-schedule span {
+  color: #333;
+  font-weight: 500;
+}
+
+.movie-trailer {
+  margin-top: 36px;
+  width: 100%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.trailer-title {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.trailer-container {
+  position: relative;
+  padding-bottom: 56.25%; /* Tỷ lệ khung hình 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.trailer-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .movie-detail-info {
+    flex-direction: column;
+  }
+
+  .movie-detail-poster {
+    width: 100%;
+    height: auto;
+    border-top-right-radius: 8px;
+    border-bottom-left-radius: 0;
+  }
+
+  .movie-detail-details {
+    padding: 15px;
+    gap: 8px;
+  }
+
+  .movie-detail-schedule {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

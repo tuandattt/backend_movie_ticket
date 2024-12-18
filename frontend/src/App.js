@@ -13,6 +13,9 @@ import SuccessPage from "./components/SuccessPage/SuccessPage";
 import AuthProvider from "./context/AuthContext";
 import "./App.css";
 import Account from "./components/Account/Account";
+import Price from "./components/Price/Price";
+import MovieDetail from "./components/MovieDetail/MovieDetail";
+import ShowtimePage from "./components/ShowtimePage/ShowtimePage";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
           <Route path="/confirm-payment" element={<ConfirmPayment />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/account" element={<Account />} />
+          <Route path="/price" element={<Price />} />
+          <Route path="/movie" element={<MovieDetail />} />
+          <Route path="/showtimes" element={<ShowtimePage />} />
         </Routes>
         <Toaster
           richColors
