@@ -21,9 +21,45 @@ $total_schedules_query = "SELECT COUNT(*) AS total_schedules FROM schedules";
 $total_schedules_result = $conn->query($total_schedules_query);
 $total_schedules = $total_schedules_result->fetch_assoc()['total_schedules'];
 
-$today_revenue_query = "SELECT SUM(total_amount) AS today_revenue FROM orders WHERE DATE(order_date) = CURDATE()";
-$today_revenue_result = $conn->query($today_revenue_query);
-$today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
+// Doanh thu từ vé hôm nay
+$dailyTicketsRevenueQuery = "
+    SELECT SUM(
+        CASE
+            WHEN u.is_u23_confirmed = 'yes' THEN 60000 * 0.82
+            WHEN u.membership_level = 'silver' THEN 60000 * 0.95
+            WHEN u.membership_level = 'gold' THEN 60000 * 0.90
+            WHEN u.membership_level = 'platinum' THEN 60000 * 0.85
+            ELSE 60000
+        END
+    ) AS daily_tickets_revenue
+    FROM bookings b
+    JOIN users u ON b.user_id = u.user_id
+    WHERE b.status = 'booked' AND DATE(b.booking_date) = CURDATE()";
+$dailyTicketsRevenueResult = $conn->query($dailyTicketsRevenueQuery);
+
+if (!$dailyTicketsRevenueResult) {
+    die("Error in tickets revenue query: " . $conn->error);
+}
+
+$dailyTicketsRevenue = $dailyTicketsRevenueResult->fetch_assoc()['daily_tickets_revenue'] ?? 0;
+
+// Doanh thu từ đồ ăn hôm nay
+$dailySnacksRevenueQuery = "
+    SELECT SUM(oi.quantity * oi.price) AS daily_snacks_revenue
+    FROM order_items oi
+    INNER JOIN orders o ON oi.order_id = o.order_id
+    WHERE o.status = 'completed' AND oi.item_type = 'snack' AND DATE(o.order_date) = CURDATE()";
+$dailySnacksRevenueResult = $conn->query($dailySnacksRevenueQuery);
+
+if (!$dailySnacksRevenueResult) {
+    die("Error in snacks revenue query: " . $conn->error);
+}
+
+$dailySnacksRevenue = $dailySnacksRevenueResult->fetch_assoc()['daily_snacks_revenue'] ?? 0;
+
+// Tổng doanh thu hôm nay
+$dailyTotalRevenue = $dailyTicketsRevenue + $dailySnacksRevenue;
+
 ?>
 
 <!DOCTYPE html>
@@ -45,25 +81,43 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
        
 
         <main>
-            <section class="overview">
-                <h2>Tổng quan</h2>
-                <div class="stats">
-                    <div class="stat">
-                        <h3>Tổng số phim</h3>
-                        <p><?php echo $total_movies; ?></p>
-                    </div>
-                    <div class="stat">
-                        <h3>Tổng số người dùng</h3>
-                        <p><?php echo $total_users; ?></p>
-                    </div>
-                    <div class="stat">
-                        <h3>Số lịch chiếu</h3>
-                        <p><?php echo $total_schedules; ?></p>
-                    </div>
-                    <div class="stat">
-                        <h3>Doanh thu hôm nay</h3>
-                        <p>$<?php echo number_format($today_revenue, 2); ?></p>
-                    </div>
+        <section class="overview">
+    <h2>Tổng quan</h2>
+    <div class="stats">
+        <div class="stat">
+            <h3>Tổng số phim</h3>
+            <p><?php echo $total_movies; ?></p>
+        </div>
+        <div class="stat">
+            <h3>Tổng số người dùng</h3>
+            <p><?php echo $total_users; ?></p>
+        </div>
+        <div class="stat">
+            <h3>Số lịch chiếu</h3>
+            <p><?php echo $total_schedules; ?></p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2>Doanh thu hôm nay</h2>
+    <table>
+        <tr>
+            <th>Doanh thu từ vé</th>
+            <td><?php echo number_format($dailyTicketsRevenue, 0, ',', '.') . ' VND'; ?></td>
+        </tr>
+        <tr>
+            <th>Doanh thu từ đồ ăn</th>
+            <td><?php echo number_format($dailySnacksRevenue, 0, ',', '.') . ' VND'; ?></td>
+        </tr>
+        <tr>
+            <th>Tổng doanh thu hôm nay</th>
+            <td><?php echo number_format($dailyTotalRevenue, 0, ',', '.') . ' VND'; ?></td>
+        </tr>
+    </table>
+</section>
+
+
                 </div>
             </section>
 
