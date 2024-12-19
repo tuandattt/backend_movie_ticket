@@ -54,6 +54,144 @@ $users_result = $conn->query($users_query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Người dùng</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007BFF;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .add-btn, .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-btn:hover, .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-btn {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .edit-btn:hover {
+            background-color: #218838;
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        #editForm {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+
+        #editForm h3 {
+            margin-top: 0;
+            color: #007BFF;
+        }
+
+        #editForm label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #editForm input, #editForm select {
+            width: 100%;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #editForm button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #editForm button:hover {
+            background-color: #0056b3;
+        }
+
+        #editForm button[type="button"] {
+            background-color: #dc3545;
+        }
+
+        #editForm button[type="button"]:hover {
+            background-color: #c82333;
+        }
+    </style>
     <link rel="stylesheet" href="../../assets/css/admin_style.css">
 </head>
 <body>
@@ -101,7 +239,6 @@ $users_result = $conn->query($users_query);
                         <form method="POST" action="" style="display: inline;">
                             <input type="hidden" name="action" value="update">
                             <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
-                            <button type="button" onclick="showEditForm(<?php echo $user['user_id']; ?>)">Chỉnh sửa</button>
                         </form>
                         <form method="POST" action="" style="display: inline;">
                             <input type="hidden" name="action" value="delete">

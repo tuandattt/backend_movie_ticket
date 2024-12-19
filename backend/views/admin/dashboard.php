@@ -26,7 +26,7 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../../assets/css/admin_style.css"> <!-- Đường dẫn đến file CSS của Admin -->
+    <link rel="stylesheet" href="../../assets/css/dashboard.css"> <!-- Đường dẫn đến file CSS của Admin -->
 </head>
 <body>
     <div class="dashboard-container">
@@ -68,6 +68,7 @@ $today_revenue = $today_revenue_result->fetch_assoc()['today_revenue'] ?? 0;
                     <a href="manage_genres.php" class="manage-btn">Quản lý Thể loại Phim</a>
                     <a href="manage_schedules.php" class="manage-btn">Quản lý Lịch chiếu</a>
                     <a href="manage_promotions.php" class="manage-btn">Quản lý Khuyến mãi</a>
+                    <a href="admin_chat.php" class="manage-btn">Phản hồi user </a>
                     <a href="reports.php" class="manage-btn">Thống kê & Báo cáo</a>
                     <a href="admin_bookings.php" class="manage-btn">Quản lý Đặt vé</a>
 

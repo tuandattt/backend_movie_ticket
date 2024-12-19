@@ -2,7 +2,6 @@
 session_start();
 include '../../includes/config.php';
 
-
 // Lấy danh sách phim từ cơ sở dữ liệu với nhiều thể loại
 $query = "SELECT movies.movie_id, movies.title, movies.poster, 
                  GROUP_CONCAT(genres.genre_name SEPARATOR ', ') AS genre_names, 
@@ -25,32 +24,131 @@ if (!$result) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Phim</title>
-    <link rel="stylesheet" href="../../assets/css/admin_style.css">
-</head>
-<script>
-function updateStatus(selectElement, movieId) {
-    var newStatus = selectElement.value;
-
-    // Gửi yêu cầu AJAX để cập nhật trạng thái
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "update_status.php", true);
-    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            alert("Trạng thái đã được cập nhật thành công.");
-        } else if (xhr.readyState === 4) {
-            alert("Đã xảy ra lỗi khi cập nhật trạng thái.");
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
         }
-    };
-    xhr.send("movie_id=" + movieId + "&status=" + newStatus);
-}
-</script>
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007BFF;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table th, table td {
+            text-align: left;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .add-btn, .back-btn {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-btn:hover, .back-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .edit-btn {
+            padding: 5px 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .edit-btn:hover {
+            background-color: #218838;
+        }
+
+        .delete-btn {
+            padding: 5px 10px;
+            background-color: #dc3545;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        img {
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        function updateStatus(selectElement, movieId) {
+            var newStatus = selectElement.value;
+
+            // Gửi yêu cầu AJAX để cập nhật trạng thái
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "update_status.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    alert("Trạng thái đã được cập nhật thành công.");
+                } else if (xhr.readyState === 4) {
+                    alert("Đã xảy ra lỗi khi cập nhật trạng thái.");
+                }
+            };
+            xhr.send("movie_id=" + movieId + "&status=" + newStatus);
+        }
+    </script>
+</head>
 <body>
     <div class="container">
         <h2>Danh sách Phim</h2>
         <a href="dashboard.php" class="back-btn">Quay lại Dashboard</a>
         <a href="add_movie.php" class="add-btn">Thêm phim mới</a>
-        <table border="1" class="movie-table">
+        <table>
             <thead>
                 <tr>
                     <th>Poster</th>
@@ -94,7 +192,7 @@ function updateStatus(selectElement, movieId) {
                     <?php endwhile; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="12">Không có phim nào được tìm thấy.</td>
+                        <td colspan="11">Không có phim nào được tìm thấy.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>

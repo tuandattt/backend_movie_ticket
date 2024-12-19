@@ -1,0 +1,110 @@
+.popup-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff;
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.popup-button:hover {
+  background-color: #0056b3;
+}
+
+.chatbox-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 350px;
+  height: 450px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: none; /* Ẩn chatbox ban đầu */
+}
+
+.chatbox-container.active {
+  display: flex; /* Hiển thị chatbox khi có class `active` */
+}
+.chatbox-header {
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  text-align: center;
+}
+
+.chatbox-messages {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+}
+
+.chatbox-message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+  word-wrap: break-word;
+  display: flex;
+  clear: both;
+}
+
+.user-message {
+  align-self: flex-start;
+  background-color: #d4edda;
+  color: #155724;
+  text-align: right;
+  float: right; /* Căn trái */
+  margin-left: 0;
+}
+
+.admin-message {
+  align-self: flex-end;
+  background-color: #d1ecf1;
+  color: #0c5460;
+  text-align: left;
+  float: left; /* Căn phải */
+  margin-right: 0;
+}
+
+.chatbox-input {
+  display: flex;
+  padding: 10px;
+  background-color: #f0f8ff;
+}
+
+.chatbox-input input {
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.chatbox-input button {
+  margin-left: 10px;
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.chatbox-input button:hover {
+  background-color: #0056b3;
+}

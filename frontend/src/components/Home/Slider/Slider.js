@@ -7,6 +7,7 @@ const Slider = () => {
   const sliderImages = [
     "img/slider1.jpg", // Đường dẫn ảnh 1
     "img/slider2.jpg", // Đường dẫn ảnh 2
+    "img/slider3.png",
     "img/slider3.jpg", // Đường dẫn ảnh 3
     "img/slider4.png", // Đường dẫn ảnh 4
   ];

@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header/Header";
 import Slider from "./Slider/Slider";
 import MovieList from "./MovieList/MovieList";
 import Footer from "./Footer/Footer";
+import ChatBox from "./ChatBox/ChatBox"; // Import ChatBox
+import { AuthContext } from "../../context/AuthContext"; // Context quản lý trạng thái đăng nhập
 
 function Home() {
   const [movies, setMovies] = useState([]); // Dữ liệu phim
   const [currentTab, setCurrentTab] = useState("now_showing"); // Trạng thái tab
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState("");
 
+  const { isLoggedIn, userId } = useContext(AuthContext); // Lấy thông tin đăng nhập từ context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,32 +22,13 @@ function Home() {
       .catch((error) => console.error("Lỗi khi lấy dữ liệu phim:", error));
   }, []);
 
-  useEffect(() => {
-    // Kiểm tra trạng thái đăng nhập từ localStorage
-    const loggedInStatus = localStorage.getItem("isLoggedIn") === "true";
-    const storedUsername = localStorage.getItem("username");
-    setIsLoggedIn(loggedInStatus);
-    setUsername(storedUsername || "");
-  }, []);
-
-  const handleLogout = () => {
-    // Xử lý logout
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("token");
-    localStorage.removeItem("username");
-    setIsLoggedIn(false);
-    setUsername("");
-    window.location.href = "http://localhost:3000/login";
-  };
-
   const filteredMovies = movies.filter((movie) => movie.status === currentTab);
 
   return (
     <div>
       <Header
         isLoggedIn={isLoggedIn}
-        username={username}
-        onLogout={handleLogout}
+        username={isLoggedIn ? "Người dùng" : ""}
       />
       <Slider />
       <div className="content">
@@ -71,6 +53,12 @@ function Home() {
         <MovieList movies={filteredMovies} currentTab={currentTab} />
       </div>
       <Footer />
+      {/* Hiển thị ChatBox */}
+      {isLoggedIn && (
+        <div className="chatbox-wrapper">
+          <ChatBox userId={userId} adminId={1} />
+        </div>
+      )}
     </div>
   );
 }
